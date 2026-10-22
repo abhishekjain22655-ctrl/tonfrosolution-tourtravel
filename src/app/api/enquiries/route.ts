@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase, isMongoConfigured } from '@/lib/mongodb';
 import EnquiryModel from '@/models/Enquiry';
 import { CustomerEnquiry } from '@/types/travel';
-
+import { sendAdminEnquiryNotification } from '@/lib/email';
 
 export async function GET(request: NextRequest) {
   try {
@@ -68,6 +68,12 @@ export async function POST(request: NextRequest) {
         status: 'new',
         internalNotes: '',
       };
+
+      // Send instant email notification to Admin
+      sendAdminEnquiryNotification(mockEnquiry).catch((err) =>
+        console.warn('Email notify error (local mode):', err)
+      );
+
       return NextResponse.json({
         saved: true,
         source: 'local-only',
@@ -95,10 +101,17 @@ export async function POST(request: NextRequest) {
       internalNotes: '',
     });
 
+    const savedDoc = newEnquiry.toJSON();
+
+    // Send instant email notification to Admin
+    sendAdminEnquiryNotification(savedDoc).catch((err) =>
+      console.warn('Email notify error (mongodb mode):', err)
+    );
+
     return NextResponse.json({
       saved: true,
       source: 'mongodb',
-      enquiry: newEnquiry.toJSON(),
+      enquiry: savedDoc,
     });
   } catch (error: any) {
     console.error('Error saving enquiry to MongoDB:', error);
