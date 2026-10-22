@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Compass, ShieldCheck, Clock, MapPin, Users, HeartHandshake, Sparkles, MessageCircle, Star } from 'lucide-react';
+import { ArrowRight, Compass, ShieldCheck, Clock, MapPin, Users, HeartHandshake, Sparkles, MessageCircle, Star, ChevronDown } from 'lucide-react';
 import { agencyConfig, getWhatsAppLink, getPhoneLink } from '@/config/agency';
 import { destinationsData } from '@/data/destinations';
 import { packagesData } from '@/data/packages';
@@ -73,10 +73,10 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#FAF8F5]">
       {/* ========================================================
-          SECTION 2: CINEMATIC HERO
+          SECTION 2: CINEMATIC HERO (Protected Framing & Motion)
       ======================================================== */}
-      <section className="relative h-[85vh] min-h-[580px] max-h-[800px] w-full flex items-center justify-center overflow-hidden">
-        {/* Background Image with warm gradient overlay */}
+      <section className="relative h-[88vh] min-h-[600px] max-h-[820px] w-full flex items-center justify-center overflow-hidden">
+        {/* Background Image / Video Container (Strictly Preserved) */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=2000&q=85"
@@ -87,25 +87,27 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-transparent opacity-90 h-32 bottom-0" />
         </div>
 
-        {/* Hero Content */}
+        {/* Hero Content with Staggered Entrance Motion */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-8 text-center text-white space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase font-semibold text-[#F3EFEA]">
-            <Sparkles className="w-3.5 h-3.5 text-[#C58B3E]" />
-            <span>Handcrafted Holidays • Indian & Global Escapes</span>
+          <div className="animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase font-semibold text-[#F3EFEA] shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-[#C58B3E] animate-float-slow" />
+              <span>Handcrafted Holidays • Indian & Global Escapes</span>
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-luxury font-bold tracking-tight text-white leading-[1.1] max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-luxury font-bold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto animate-fade-in-delay-1">
             Travel That Feels Extraordinary.
           </h1>
 
-          <p className="text-base sm:text-xl text-[#E2E8F0] font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-[#E2E8F0] font-light max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
             From the tranquil pine valleys of Kashmir to the glistening peaks of Switzerland. Unrushed itineraries, verified luxury stays, and dedicated 24/7 care.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 animate-fade-in-delay-3">
             <Link
               href="/packages"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#C25E34] hover:bg-[#A74E28] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#C25E34] hover:bg-[#A74E28] active:scale-95 text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-lg hover:shadow-2xl"
             >
               <span>Explore Curated Packages</span>
               <ArrowRight className="w-4 h-4" />
@@ -115,7 +117,7 @@ export default function HomePage() {
               href={getWhatsAppLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/15 hover:bg-white/25 text-white backdrop-blur-md border border-white/30 text-xs font-semibold uppercase tracking-wider transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 text-white backdrop-blur-md border border-white/30 text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm"
             >
               <MessageCircle className="w-4 h-4 text-emerald-400" />
               <span>Instant WhatsApp Advice</span>
@@ -132,7 +134,7 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 4: POPULAR DOMESTIC DESTINATIONS
       ======================================================== */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-8">
+      <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
           <div>
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#C25E34] mb-2">
@@ -161,7 +163,7 @@ export default function HomePage() {
             <Link
               key={dest.id}
               href={`/packages?destination=${dest.slug}`}
-              className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
+              className="group block relative h-96 rounded-2xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
             >
               <img
                 src={dest.heroImage}
@@ -172,7 +174,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
               <div className="absolute top-4 left-4">
-                <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
+                <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/95 text-[#0F172A] backdrop-blur-sm shadow-2xs">
                   {dest.packageCount} Itineraries
                 </span>
               </div>
@@ -200,7 +202,7 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 5: POPULAR INTERNATIONAL DESTINATIONS
       ======================================================== */}
-      <section className="py-20 bg-[#F5F2EB] border-y border-[#E8E3DA]">
+      <section className="py-20 md:py-24 bg-[#F5F2EB] border-y border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div>
@@ -230,7 +232,7 @@ export default function HomePage() {
               <Link
                 key={dest.id}
                 href={`/packages?destination=${dest.slug}`}
-                className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
+                className="group block relative h-96 rounded-2xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
               >
                 <img
                   src={dest.heroImage}
@@ -241,7 +243,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
                 <div className="absolute top-4 left-4">
-                  <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/95 text-[#0F172A] backdrop-blur-sm shadow-2xs">
                     {dest.packageCount} Itineraries
                   </span>
                 </div>
@@ -270,7 +272,7 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 6: FEATURED HOLIDAY PACKAGES
       ======================================================== */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-8">
+      <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#154D4F]/10 text-xs font-bold uppercase tracking-wider text-[#154D4F] mb-3">
             <Sparkles className="w-3.5 h-3.5 text-[#C25E34]" />
@@ -290,10 +292,10 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-14 text-center">
           <Link
             href="/packages"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-[#154D4F] text-[#154D4F] hover:bg-[#154D4F] hover:text-white text-xs font-semibold uppercase tracking-wider transition-all"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-[#154D4F] text-[#154D4F] hover:bg-[#154D4F] hover:text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 active:scale-95"
           >
             <span>Browse Complete Holiday Portfolio</span>
             <ArrowRight className="w-4 h-4" />
@@ -304,7 +306,7 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 7: TRIP CATEGORIES & THEMES
       ======================================================== */}
-      <section className="py-20 bg-[#F5F2EB] border-t border-[#E8E3DA]">
+      <section className="py-20 md:py-24 bg-[#F5F2EB] border-t border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl font-serif-luxury font-bold text-[#0F172A] mb-2">
@@ -320,7 +322,7 @@ export default function HomePage() {
               <Link
                 key={cat.title}
                 href={`/packages?category=${encodeURIComponent(cat.slug)}`}
-                className="group relative h-72 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-[#E8E3DA]"
+                className="group relative h-72 rounded-xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
               >
                 <img
                   src={cat.image}
@@ -346,7 +348,7 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 8: WHY TRAVEL WITH US (TRUTHFUL & VERIFIABLE)
       ======================================================== */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-8">
+      <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
             The {agencyConfig.shortName} Difference
@@ -363,9 +365,9 @@ export default function HomePage() {
           {whyChooseUs.map((pillar, idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-white border border-[#E8E3DA] shadow-sm hover:shadow-md transition-shadow"
+              className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA] flex items-center justify-center mb-4 text-[#C25E34]">
                 {pillar.icon}
               </div>
               <h3 className="text-base font-bold text-[#0F172A] mb-2 font-serif-luxury">
@@ -382,7 +384,7 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 9: CUSTOMER STORIES & EXPERIENCES
       ======================================================== */}
-      <section className="py-20 bg-[#FAF8F5] border-t border-[#E8E3DA]">
+      <section className="py-20 md:py-24 bg-[#FAF8F5] border-t border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
@@ -400,7 +402,7 @@ export default function HomePage() {
             {sampleTestimonials.map((t) => (
               <div
                 key={t.id}
-                className="p-6 rounded-2xl bg-white border border-[#E8E3DA] shadow-sm flex flex-col justify-between"
+                className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center gap-1 text-[#C58B3E] mb-3">

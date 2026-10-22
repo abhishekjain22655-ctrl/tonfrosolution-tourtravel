@@ -127,7 +127,7 @@ export default function Navbar() {
           <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/plan-your-trip"
-              className="inline-flex items-center justify-center px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white bg-[#C25E34] hover:bg-[#A74E28] rounded-md transition-all duration-200 shadow-sm hover:shadow-md"
+              className="inline-flex items-center justify-center px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white bg-[#C25E34] hover:bg-[#A74E28] active:scale-95 rounded-md transition-all duration-200 shadow-sm hover:shadow-md"
             >
               Plan Custom Trip
             </Link>
@@ -137,7 +137,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-[#0F172A] hover:text-[#C25E34] rounded-md focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+            className="lg:hidden p-2 text-[#0F172A] hover:text-[#C25E34] active:scale-95 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C25E34] transition-all"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -145,9 +145,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer with smooth entrance animation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[98px] bottom-0 bg-[#FAF8F5] z-50 px-6 py-6 border-t border-[#E8E3DA] overflow-y-auto flex flex-col justify-between">
+        <div className="lg:hidden fixed inset-x-0 top-[98px] bottom-0 bg-[#FAF8F5] z-50 px-6 py-6 border-t border-[#E8E3DA] overflow-y-auto flex flex-col justify-between animate-fade-in-up">
           <div className="space-y-4">
             <p className="text-xs uppercase tracking-widest font-semibold text-[#64748B] mb-2">
               Explore Journeys
@@ -157,7 +157,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block text-lg font-serif-luxury py-2 border-b border-[#E8E3DA]/60 ${
+                className={`block text-lg font-serif-luxury py-2 border-b border-[#E8E3DA]/60 transition-colors ${
                   isActive(link.href)
                     ? 'text-[#C25E34] font-bold'
                     : 'text-[#0F172A] hover:text-[#C25E34]'
@@ -171,7 +171,7 @@ export default function Navbar() {
               <Link
                 href="/plan-your-trip"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center block px-5 py-3 text-sm font-semibold uppercase tracking-wider text-white bg-[#C25E34] rounded-md"
+                className="w-full text-center block px-5 py-3 text-sm font-semibold uppercase tracking-wider text-white bg-[#C25E34] hover:bg-[#A74E28] active:scale-95 rounded-md transition-all"
               >
                 Plan Custom Trip
               </Link>
@@ -179,7 +179,7 @@ export default function Navbar() {
                 href={getWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full text-center block px-5 py-3 text-sm font-semibold uppercase tracking-wider text-emerald-950 bg-emerald-100 border border-emerald-300 rounded-md"
+                className="w-full text-center block px-5 py-3 text-sm font-semibold uppercase tracking-wider text-emerald-950 bg-emerald-100 hover:bg-emerald-200 active:scale-95 border border-emerald-300 rounded-md transition-all"
               >
                 Chat on WhatsApp
               </a>
