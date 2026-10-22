@@ -1,18 +1,38 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Compass, Sparkles, MapPin, ArrowRight } from 'lucide-react';
+import { Sparkles, MapPin } from 'lucide-react';
 import { packagesData } from '@/data/packages';
 import { destinationsData } from '@/data/destinations';
+import { getPublishedPackages } from '@/lib/storage';
+import { TravelPackage } from '@/types/travel';
 import PackageCard from '@/components/PackageCard';
 
-export const metadata = {
-  title: 'Domestic Holiday Packages | Incredible India Tours',
-  description: 'Explore verified luxury tour packages across Kashmir, Kerala, Rajasthan, Ladakh, and Andaman with handpicked stays and private chauffeurs.',
-};
-
 export default function DomesticPage() {
-  const domesticPackages = packagesData.filter((p) => p.destinationType === 'domestic');
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>(packagesData);
+
+  useEffect(() => {
+    setPackagesList(getPublishedPackages());
+    const handleUpdate = () => setPackagesList(getPublishedPackages());
+    window.addEventListener('packages_updated', handleUpdate);
+    return () => window.removeEventListener('packages_updated', handleUpdate);
+  }, []);
+
+  const domesticPackages = packagesList.filter(
+    (p) => p.destinationType === 'domestic' && (p.status === 'published' || !p.status)
+  );
   const domesticDestinations = destinationsData.filter((d) => d.type === 'domestic');
+
+  const getDestTripCount = (dest: (typeof destinationsData)[0]) => {
+    return domesticPackages.filter(
+      (p) =>
+        p.destinationName.toLowerCase().includes(dest.name.toLowerCase()) ||
+        dest.name.toLowerCase().includes(p.destinationName.toLowerCase()) ||
+        p.slug.toLowerCase().includes(dest.slug.toLowerCase()) ||
+        p.regionOrCountry.toLowerCase().includes(dest.name.toLowerCase())
+    ).length;
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] py-12">
@@ -21,7 +41,7 @@ export default function DomesticPage() {
         <div className="max-w-3xl mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#154D4F]/10 text-xs font-bold uppercase tracking-wider text-[#154D4F] mb-3">
             <Sparkles className="w-3.5 h-3.5 text-[#C25E34]" />
-            <span>Incredible India Tours</span>
+            <span>Incredible India Tours ({domesticPackages.length})</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-serif-luxury font-bold text-[#0F172A] mb-3 leading-tight">
             Handcrafted Domestic Holidays
@@ -37,20 +57,33 @@ export default function DomesticPage() {
             Explore by Region:
           </span>
           <div className="flex flex-wrap gap-2.5">
-            {domesticDestinations.map((d) => (
-              <Link
-                key={d.id}
-                href={`/packages?destination=${d.slug}`}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#154D4F] border border-[#E8E3DA] hover:border-[#C25E34] hover:text-[#C25E34] transition-all shadow-2xs"
-              >
-                <MapPin className="w-3 h-3 text-[#C25E34]" />
-                <span>{d.name}</span>
-                <span className="text-[10px] bg-[#FAF8F5] px-1.5 py-0.2 rounded-full text-[#64748B]">
-                  {d.packageCount}
-                </span>
-              </Link>
-            ))}
+            {domesticDestinations.map((d) => {
+              const tripCount = getDestTripCount(d);
+              return (
+                <Link
+                  key={d.id}
+                  href={`/packages?destination=${d.slug}`}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#154D4F] border border-[#E8E3DA] hover:border-[#C25E34] hover:text-[#C25E34] transition-all shadow-2xs"
+                >
+                  <MapPin className="w-3 h-3 text-[#C25E34]" />
+                  <span>{d.name}</span>
+                  <span className="text-[10px] bg-[#FAF8F5] px-1.5 py-0.2 rounded-full text-[#64748B]">
+                    {tripCount}
+                  </span>
+                </Link>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Section Count Header */}
+        <div className="flex items-center justify-between mb-6 pb-2 border-b border-[#E8E3DA]/60">
+          <p className="text-xs font-bold uppercase tracking-wider text-[#154D4F]">
+            All Domestic Packages ({domesticPackages.length})
+          </p>
+          <span className="text-xs text-[#64748B]">
+            Showing {domesticPackages.length} active itineraries
+          </span>
         </div>
 
         {/* Packages Grid */}

@@ -1,13 +1,25 @@
 'use client';
 
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Filter, SlidersHorizontal, MapPin, Tag, RefreshCcw } from 'lucide-react';
 import { packagesData } from '@/data/packages';
 import PackageCard from '@/components/PackageCard';
-import { TripCategory } from '@/types/travel';
+import { TripCategory, TravelPackage } from '@/types/travel';
+import { getPublishedPackages } from '@/lib/storage';
 
 function PackagesFilterContent() {
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>(packagesData);
+
+  useEffect(() => {
+    setPackagesList(getPublishedPackages());
+    const handleUpdate = () => {
+      setPackagesList(getPublishedPackages());
+    };
+    window.addEventListener('packages_updated', handleUpdate);
+    return () => window.removeEventListener('packages_updated', handleUpdate);
+  }, []);
+
   const searchParams = useSearchParams();
   const initialType = searchParams.get('type') || 'all';
   const initialCategory = searchParams.get('category') || 'all';
@@ -30,7 +42,10 @@ function PackagesFilterContent() {
   ];
 
   const filteredPackages = useMemo(() => {
-    return packagesData.filter((pkg) => {
+    return packagesList.filter((pkg) => {
+      // Must be published (or default)
+      if (pkg.status && pkg.status !== 'published') return false;
+
       // Type filter (domestic vs international)
       if (typeFilter !== 'all' && pkg.destinationType !== typeFilter) {
         return false;
@@ -131,9 +146,18 @@ function PackagesFilterContent() {
               </label>
               <div className="space-y-1.5">
                 {[
-                  { label: 'All Regions', value: 'all' },
-                  { label: 'India (Domestic)', value: 'domestic' },
-                  { label: 'Global (International)', value: 'international' },
+                  {
+                    label: `All Regions (${packagesList.filter((p) => p.status === 'published' || !p.status).length})`,
+                    value: 'all',
+                  },
+                  {
+                    label: `India (Domestic) (${packagesList.filter((p) => (p.status === 'published' || !p.status) && p.destinationType === 'domestic').length})`,
+                    value: 'domestic',
+                  },
+                  {
+                    label: `Global (International) (${packagesList.filter((p) => (p.status === 'published' || !p.status) && p.destinationType === 'international').length})`,
+                    value: 'international',
+                  },
                 ].map((item) => (
                   <label
                     key={item.value}

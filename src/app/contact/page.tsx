@@ -5,8 +5,8 @@ import { faqData } from '@/data/faq';
 import EnquiryForm from '@/components/EnquiryForm';
 
 export const metadata = {
-  title: `Contact Us & Office Locations | ${agencyConfig.companyName}`,
-  description: `Get in touch with ${agencyConfig.companyName}. Office addresses in Bengaluru, New Delhi, and Mumbai. Instant WhatsApp and phone assistance.`,
+  title: `Contact Us & Head Office | ${agencyConfig.companyName}`,
+  description: `Get in touch with ${agencyConfig.companyName}. Office address in Pitampura, New Delhi. Official phone: ${agencyConfig.contact.displayPhone}, Email: ${agencyConfig.contact.email}.`,
 };
 
 export default function ContactPage() {
@@ -22,7 +22,7 @@ export default function ContactPage() {
             Contact Our Travel Concierge
           </h1>
           <p className="text-sm sm:text-base text-[#64748B]">
-            Have an itinerary question, looking to book a customized holiday, or need urgent on-trip support? Reach us through any of our official channels.
+            Have an itinerary question, looking to book a customized holiday, or need travel support? Reach us through any of our official channels.
           </p>
         </div>
 
@@ -46,11 +46,9 @@ export default function ContactPage() {
               >
                 {agencyConfig.contact.displayPhone}
               </a>
-              {agencyConfig.contact.secondaryPhone && (
-                <span className="text-xs text-[#94A3B8] block mt-0.5">
-                  Alt: {agencyConfig.contact.secondaryPhone}
-                </span>
-              )}
+              <span className="text-xs text-[#94A3B8] block mt-0.5">
+                Official Support Line
+              </span>
             </div>
           </div>
 
@@ -63,7 +61,7 @@ export default function ContactPage() {
               Official WhatsApp
             </h3>
             <p className="text-xs text-[#64748B]">
-              Fastest way to get day-wise PDF itineraries and quick estimates.
+              Fastest way to get day-wise itineraries, quotes, and quick answers.
             </p>
             <div className="pt-2">
               <a
@@ -76,7 +74,7 @@ export default function ContactPage() {
                 <span>→</span>
               </a>
               <span className="text-xs text-[#94A3B8] block mt-0.5">
-                24/7 during ongoing guest tours
+                Quick responses during business hours
               </span>
             </div>
           </div>
@@ -87,81 +85,74 @@ export default function ContactPage() {
               <Mail className="w-6 h-6" />
             </div>
             <h3 className="text-base font-bold text-[#0F172A] font-serif-luxury">
-              Email Desks
+              Official Email
             </h3>
             <p className="text-xs text-[#64748B]">
-              Send RFP proposals, group bookings, or customer feedback.
+              Send itinerary enquiries, corporate travel requests, or questions.
             </p>
             <div className="pt-2 space-y-0.5">
               <a
-                href={`mailto:${agencyConfig.contact.bookingEmail}`}
-                className="text-xs font-semibold text-[#154D4F] hover:text-[#C25E34] transition-colors block"
+                href={`mailto:${agencyConfig.contact.email}`}
+                className="text-xs font-semibold text-[#154D4F] hover:text-[#C25E34] transition-colors block break-all"
               >
-                {agencyConfig.contact.bookingEmail}
+                {agencyConfig.contact.email}
               </a>
               <span className="text-[11px] text-[#94A3B8] block">
-                Support: {agencyConfig.contact.supportEmail}
+                Response within 24 business hours
               </span>
             </div>
           </div>
         </div>
 
-        {/* Office Locations & Hours */}
+        {/* Office Location & Hours */}
         <div className="bg-white p-8 rounded-2xl border border-[#E8E3DA] shadow-sm space-y-8">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-1">
-              Registered Locations
+              Registered Office
             </span>
             <h2 className="text-2xl font-serif-luxury font-bold text-[#0F172A]">
-              Office Addresses & Operating Timings
+              Office Address & Operating Timings
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Headquarters */}
-            <div className="space-y-2 p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA]">
+            <div className="space-y-3 p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA]">
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#154D4F]">
-                <MapPin className="w-3.5 h-3.5 text-[#C25E34]" />
-                <span>Headquarters (Bengaluru)</span>
+                <MapPin className="w-4 h-4 text-[#C25E34]" />
+                <span>Head Office — New Delhi</span>
               </div>
-              <p className="text-xs text-[#475569] leading-relaxed">
+              <p className="text-xs text-[#334155] leading-relaxed">
                 {agencyConfig.contact.officeAddress.street}, {agencyConfig.contact.officeAddress.locality},{' '}
-                {agencyConfig.contact.officeAddress.city}, {agencyConfig.contact.officeAddress.state} -{' '}
-                {agencyConfig.contact.officeAddress.pincode}
+                {agencyConfig.contact.officeAddress.city}, {agencyConfig.contact.officeAddress.state} –{' '}
+                {agencyConfig.contact.officeAddress.pincode}, {agencyConfig.contact.officeAddress.country}
+              </p>
+              {agencyConfig.contact.officeAddress.landmark && (
+                <p className="text-xs font-medium text-[#C25E34]">
+                  Landmark: {agencyConfig.contact.officeAddress.landmark}
+                </p>
+              )}
+              <p className="text-xs text-[#64748B] pt-1">
+                Contact: <a href={getPhoneLink()} className="font-semibold text-[#154D4F] hover:underline">{agencyConfig.contact.displayPhone}</a>
               </p>
             </div>
 
-            {/* Branch 1 */}
-            {agencyConfig.contact.branchOffices?.[0] && (
-              <div className="space-y-2 p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA]">
-                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#154D4F]">
-                  <MapPin className="w-3.5 h-3.5 text-[#C25E34]" />
-                  <span>{agencyConfig.contact.branchOffices[0].city} Office</span>
-                </div>
-                <p className="text-xs text-[#475569] leading-relaxed">
-                  {agencyConfig.contact.branchOffices[0].address}
-                </p>
-                <p className="text-xs font-medium text-[#154D4F]">
-                  Tel: {agencyConfig.contact.branchOffices[0].phone}
-                </p>
+            {/* Hours & Visiting Info */}
+            <div className="space-y-3 p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA]">
+              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#154D4F]">
+                <Clock className="w-4 h-4 text-[#C25E34]" />
+                <span>Working Hours & Appointments</span>
               </div>
-            )}
-
-            {/* Branch 2 */}
-            {agencyConfig.contact.branchOffices?.[1] && (
-              <div className="space-y-2 p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA]">
-                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#154D4F]">
-                  <MapPin className="w-3.5 h-3.5 text-[#C25E34]" />
-                  <span>{agencyConfig.contact.branchOffices[1].city} Office</span>
-                </div>
-                <p className="text-xs text-[#475569] leading-relaxed">
-                  {agencyConfig.contact.branchOffices[1].address}
-                </p>
-                <p className="text-xs font-medium text-[#154D4F]">
-                  Tel: {agencyConfig.contact.branchOffices[1].phone}
-                </p>
-              </div>
-            )}
+              <p className="text-xs text-[#334155] leading-relaxed">
+                <strong>Business Hours:</strong> Monday – Saturday: 9:30 AM to 7:00 PM IST
+              </p>
+              <p className="text-xs text-[#64748B]">
+                Sunday: Closed for office visits. Dedicated emergency support remains active for on-tour travellers.
+              </p>
+              <p className="text-xs text-[#64748B] pt-1">
+                For in-person trip planning consultations at our Pitampura office, prior scheduling via phone or WhatsApp is recommended.
+              </p>
+            </div>
           </div>
 
           <div className="pt-4 border-t border-[#E8E3DA] flex items-center gap-2 text-xs text-[#64748B]">

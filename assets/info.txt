@@ -1,0 +1,448 @@
+# TONFRO SOLUTION TOUR AND TRAVEL
+## Official Company Information & Website Content Brief
+
+Use this document as the primary source of company information when updating the existing travel agency website. Apply the correct company identity, contact details, brand messaging, and travel-related content consistently throughout the website.
+
+IMPORTANT: Preserve the existing website architecture, working functionality, approved animations, and background videos. Update company information and relevant content without unnecessarily rebuilding the website.
+
+---
+
+# 1. OFFICIAL COMPANY DETAILS
+
+**Business Name:** Tonfro Solution Tour and Travel
+
+**Business Type:** Tour and Travel Agency
+
+**Primary Market:** India
+
+**Service Coverage:** Domestic and International Travel
+
+**Business Email:** Tonfrosolutionpvtltd@gmail.com
+
+**Contact Number:** +91 8796969992
+
+**Country:** India
+
+**State:** Delhi
+
+**City:** New Delhi
+
+**District:** North West Delhi
+
+**PIN Code:** 110034
+
+## Complete Office Address
+
+Tonfro Solution Tour and Travel  
+Office No. 304, Third Floor  
+Khasra No. 502/348  
+Vats Market, Pitampura Village  
+New Delhi, North West Delhi  
+Delhi – 110034, India
+
+**Nearby Landmark:** Vats Market
+
+Use this address consistently in the contact page, footer, contact forms, business information section, and any other relevant website areas.
+
+Keep the official business name exactly as supplied. Do not randomly change it to TonFro Services, Tonfro Solutions Private Limited, or another similarly named company.
+
+---
+
+# 2. BRAND POSITIONING
+
+Position Tonfro Solution Tour and Travel as a modern Indian travel agency helping customers discover destinations across India and internationally.
+
+The website should communicate:
+- Memorable travel experiences.
+- Domestic and international holiday planning.
+- Convenient access to travel information.
+- Personalized trip enquiries.
+- Clear communication with travel consultants.
+- A professional and dependable customer experience.
+
+The brand should feel modern, approachable, sophisticated, and suitable for individuals, couples, families, and groups.
+
+Do not claim specific awards, certifications, years of experience, customer counts, partnerships, or industry rankings unless the company provides verified information.
+
+---
+
+# 3. BRAND MESSAGING
+
+Use the following proposed messaging as the starting point for website content.
+
+## Primary Brand Headline
+
+"Discover the World. Experience More."
+
+## Supporting Headline
+
+"From unforgettable holidays across India to exciting international adventures, let your next journey begin with Tonfro Solution Tour and Travel."
+
+## Short Brand Description
+
+"Tonfro Solution Tour and Travel helps travellers explore domestic and international destinations through thoughtfully presented holiday options and personalized travel enquiries. Discover destinations, explore travel packages, and connect with our team to plan your next journey."
+
+## Alternative Taglines
+
+- Your Journey, Our Inspiration.
+- Explore More. Travel Better.
+- Every Destination Has a Story.
+- Discover New Places, Create Lasting Memories.
+- Your Next Adventure Starts Here.
+
+Use one consistent primary tagline throughout the website. Avoid displaying every tagline simultaneously.
+
+---
+
+# 4. TRAVEL SERVICES AND DESTINATION CATEGORIES
+
+Organize the website around domestic and international travel.
+
+These are proposed website categories. Publish individual services as confirmed offerings only.
+
+## A. Domestic Holidays
+
+Create a dedicated domestic travel section featuring Indian destinations such as:
+
+- Kashmir and Srinagar
+- Himachal Pradesh and Manali
+- Uttarakhand and Rishikesh
+- Kerala and Munnar
+- Rajasthan, Jaipur and Udaipur
+- Goa
+- Andaman and Nicobar Islands
+- North East India
+- Agra and other heritage destinations
+- Pilgrimage and spiritual destinations
+
+Each destination should have high-quality imagery, an introduction, highlights, suggested trip durations where appropriate, and links to relevant packages.
+
+Do not imply that every destination has a currently available package. Clearly distinguish sample content from confirmed offers.
+
+## B. International Holidays
+
+Create a separate international travel section featuring destinations such as:
+
+- Dubai and the United Arab Emirates
+- Thailand
+- Bali and Indonesia
+- Singapore
+- Malaysia
+- Maldives
+- Vietnam
+- Sri Lanka
+- Europe
+- Other international destinations supported by the agency
+
+Each destination page should include an overview, attractions, travel inspiration, suggested itineraries where available, and a clear enquiry CTA.
+
+Do not promise visa approval, guaranteed entry, fixed airfares, or real-time availability.
+
+## C. Holiday Package Categories
+
+Where supported by actual offerings, organize packages into:
+
+- Family Holidays
+- Honeymoon Packages
+- Couple Getaways
+- Group Tours
+- Adventure Holidays
+- Luxury Holidays
+- Budget-Friendly Trips
+- Weekend Getaways
+- Customized Holidays
+- Pilgrimage Tours
+
+Keep the navigation simple and make it easy for visitors to find a suitable trip.
+
+## D. Additional Services
+
+Flight bookings, hotel reservations, transport arrangements, cruise holidays, visa assistance, travel insurance, corporate travel, and other services may be added only after confirming that the company provides them.
+
+Do not display unsupported services as guaranteed offerings.
+
+---
+
+# 5. WEBSITE HOMEPAGE CONTENT
+
+Organize the homepage into the following sections.
+
+## Section 1: Navigation
+
+Display:
+- Company logo and brand name.
+- Home.
+- Domestic Holidays.
+- International Holidays.
+- Holiday Packages.
+- About Us.
+- Contact Us.
+- A prominent Plan Your Trip CTA.
+
+Use a clean, responsive navigation system that works on mobile and desktop.
+
+## Section 2: Cinematic Hero
+
+Use the existing approved travel background video without changing its frames, composition, timing, crop, or camera movement.
+
+Suggested headline:
+
+"Your Next Journey Begins Here."
+
+Supporting text:
+
+"Explore extraordinary destinations across India and around the world with Tonfro Solution Tour and Travel."
+
+Primary CTA: Explore Destinations
+
+Secondary CTA: Plan Your Trip
+
+Ensure text remains readable against the video without excessive overlays.
+
+## Section 3: Explore by Destination
+
+Display visually engaging cards for popular domestic and international destinations.
+
+Each card should contain:
+- Destination name.
+- High-quality destination photograph.
+- A concise description or travel highlight.
+- An Explore Destination link.
+
+## Section 4: Featured Holiday Packages
+
+Display verified packages or clearly marked demonstration packages.
+
+Each package card should support:
+- Package title.
+- Destination.
+- Number of days and nights.
+- Starting price, if verified.
+- Package highlights.
+- View Details CTA.
+- Enquire on WhatsApp CTA.
+
+Never invent real prices, discounts, ratings, or availability.
+
+## Section 5: Explore Your Travel Style
+
+Create an elegant section for family trips, romantic holidays, group travel, adventures, weekend escapes, and customized holidays where relevant.
+
+Use relevant imagery and concise descriptions.
+
+## Section 6: Why Choose Tonfro?
+
+Use truthful, service-oriented messaging around:
+- Convenient enquiry options.
+- Domestic and international travel discovery.
+- Personalized travel planning, if offered.
+- Clear communication about package details.
+- Assistance with understanding itinerary and travel requirements.
+
+Do not claim guaranteed lowest prices, 24/7 support, verified customer satisfaction, or other unconfirmed benefits.
+
+## Section 7: Personalized Trip Planning
+
+Headline:
+
+"Let's Plan Your Next Adventure."
+
+Description:
+
+"Tell us where you want to go, when you plan to travel, and what kind of experience you are looking for. Contact Tonfro Solution Tour and Travel to discuss your travel requirements."
+
+CTA: Start Planning
+
+## Section 8: Customer Reviews
+
+Display genuine reviews only after they are supplied or verified.
+
+Do not create fictional testimonials, names, profile photos, star ratings, or customer statistics.
+
+## Section 9: Contact CTA
+
+Headline:
+
+"Ready to Explore Somewhere New?"
+
+Supporting text:
+
+"Get in touch with Tonfro Solution Tour and Travel to discuss your next domestic or international trip."
+
+Buttons:
+- Call Us.
+- WhatsApp Us.
+- Send an Enquiry.
+
+## Section 10: Footer
+
+Include:
+- Company name.
+- Short company description.
+- Domestic travel link.
+- International travel link.
+- Holiday package link.
+- About Us.
+- Contact Us.
+- Official email.
+- Telephone number.
+- Complete office address.
+- Privacy Policy.
+- Terms and Conditions.
+- Cancellation and Refund Policy, where applicable.
+
+---
+
+# 6. CONTACT AND ENQUIRY FUNCTIONALITY
+
+Use these official contact details throughout the website.
+
+**Telephone:** +91 8796969992
+
+**Email:** Tonfrosolutionpvtltd@gmail.com
+
+## Click-to-Call
+
+Configure the telephone button to open the customer's phone dialler using the correct international-format number.
+
+## WhatsApp
+
+Create a WhatsApp enquiry link using the verified business number. Confirm that the number is registered on WhatsApp before publishing the button.
+
+Use a prefilled message such as:
+
+"Hello Tonfro Solution Tour and Travel, I would like to enquire about your travel packages. Please share the available options and details."
+
+When the customer enquires about a specific package, include its name and destination in the prefilled message.
+
+## Email
+
+Configure the email button to open a new email addressed to:
+
+Tonfrosolutionpvtltd@gmail.com
+
+## Custom Trip Enquiry Form
+
+Create or update a functional enquiry form with:
+- Full name.
+- Mobile number.
+- Email address, optional.
+- Domestic or international travel.
+- Preferred destination.
+- Departure city.
+- Tentative travel dates.
+- Number of adults and children.
+- Approximate budget.
+- Special requirements.
+
+Validate the form and display accurate submission states.
+
+If Supabase is configured, save enquiries securely in the database and make them accessible to authorized staff. If the backend is not connected, clearly identify that limitation rather than pretending enquiries have been saved.
+
+---
+
+# 7. CONTACT PAGE AND LOCATION
+
+Create a professional contact page with the following information.
+
+**Tonfro Solution Tour and Travel**
+
+Office No. 304, Third Floor  
+Khasra No. 502/348  
+Vats Market, Pitampura Village  
+New Delhi, North West Delhi  
+Delhi – 110034, India
+
+**Phone:** +91 8796969992
+
+**Email:** Tonfrosolutionpvtltd@gmail.com
+
+**Landmark:** Vats Market
+
+Include functional telephone and email links. Add a map only after confirming the location pin corresponds to the correct office.
+
+Do not invent business hours. Provide an editable business-hours configuration if required.
+
+---
+
+# 8. BRANDING AND VISUAL DESIGN
+
+Maintain a premium travel website appearance.
+
+Use:
+- Cinematic destination imagery.
+- Elegant typography.
+- Clean white or warm-neutral backgrounds.
+- Deep navy or charcoal text.
+- Restrained accent colors.
+- Consistent spacing and responsive layouts.
+- Clear calls to action.
+- Professional destination and package cards.
+
+Keep the approved background videos unchanged.
+
+Maintain the existing travel-inspired animation system, including approved scroll reveals, subtle image transitions, smooth navigation, and refined hover interactions.
+
+Do not add unnecessary animations, excessive gradients, or distracting visual effects.
+
+Use a consistent brand identity throughout the homepage, package pages, enquiry forms, contact page, and footer.
+
+---
+
+# 9. DATABASE AND ADMIN CONTENT
+
+Inspect the existing Supabase schema and application before modifying the database.
+
+Where the architecture supports it, keep company information in a centralized configuration source and manage destination and package content through structured records.
+
+The admin system should support authorized users in managing:
+- Domestic and international destinations.
+- Holiday packages.
+- Package descriptions and itineraries.
+- Images and galleries.
+- Package pricing and availability.
+- Customer enquiries.
+- Enquiry status and follow-up notes.
+
+Preserve existing working tables, relationships, authentication, and security policies.
+
+Do not create duplicate database tables or execute destructive SQL without reviewing the current schema.
+
+The company name, telephone number, email address, and office address must not be duplicated as inconsistent hardcoded values across unrelated components.
+
+---
+
+# 10. SEO AND LOCAL BUSINESS INFORMATION
+
+Use consistent company details in relevant website metadata and contact sections.
+
+Suggested homepage title:
+
+"Tonfro Solution Tour and Travel | Domestic & International Holidays"
+
+Suggested meta description:
+
+"Explore domestic and international holiday destinations with Tonfro Solution Tour and Travel. Discover travel packages and contact our team to enquire about your next trip."
+
+Use descriptive page titles and readable URLs for domestic destinations, international destinations, packages, and contact information.
+
+Add appropriate structured data only when the business category and supplied information can be represented accurately.
+
+Do not invent a website URL, social media profiles, registration number, GST number, office hours, or business certifications.
+
+---
+
+# 11. FINAL IMPLEMENTATION INSTRUCTIONS
+
+1. Inspect the existing website and all company information files.
+2. Use this document as the primary source of truth for the supplied business details.
+3. Replace outdated or placeholder company information throughout the website.
+4. Update relevant homepage copy, destination content, contact information, metadata, and footer.
+5. Preserve existing animations, approved background videos, and working functionality.
+6. Keep sample travel packages clearly identified until real package data is provided.
+7. Verify telephone, email, WhatsApp, navigation, enquiry forms, and responsive layouts.
+8. Check that the same company name and contact information appear consistently everywhere.
+9. Do not claim that a database, integration, or enquiry workflow works unless it has been tested.
+10. Report the changes made and list any missing business information that requires confirmation.
+
+The final website should present Tonfro Solution Tour and Travel as a professional, modern Indian travel brand offering domestic and international travel discovery, with clear communication channels and a polished customer experience.

@@ -1,18 +1,51 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Compass, ShieldCheck, Clock, MapPin, Users, HeartHandshake, Sparkles, MessageCircle, Star } from 'lucide-react';
+import { ArrowRight, Compass, ShieldCheck, Clock, MapPin, Users, HeartHandshake, Sparkles, MessageCircle, Star, Phone } from 'lucide-react';
 import { agencyConfig, getWhatsAppLink, getPhoneLink } from '@/config/agency';
 import { destinationsData } from '@/data/destinations';
 import { packagesData } from '@/data/packages';
 import { sampleTestimonials } from '@/data/testimonials';
+import { TravelPackage } from '@/types/travel';
+import { getPublishedPackages } from '@/lib/storage';
 import PackageCard from '@/components/PackageCard';
 import TripSearchHero from '@/components/TripSearchHero';
 import EnquiryForm from '@/components/EnquiryForm';
 
 export default function HomePage() {
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>(packagesData);
+
+  useEffect(() => {
+    setPackagesList(getPublishedPackages());
+    const handleUpdate = () => {
+      setPackagesList(getPublishedPackages());
+    };
+    window.addEventListener('packages_updated', handleUpdate);
+    return () => window.removeEventListener('packages_updated', handleUpdate);
+  }, []);
+
+  const publishedPackages = packagesList.filter((p) => p.status === 'published' || !p.status);
+  const domesticPackages = publishedPackages.filter((p) => p.destinationType === 'domestic');
+  const internationalPackages = publishedPackages.filter((p) => p.destinationType === 'international');
   const domesticDestinations = destinationsData.filter((d) => d.type === 'domestic');
   const internationalDestinations = destinationsData.filter((d) => d.type === 'international');
-  const featuredPackages = packagesData.filter((p) => p.featured);
+  const featuredPackages = publishedPackages.filter((p) => p.featured);
+  const displayPackages = featuredPackages.length > 0 ? featuredPackages : publishedPackages.slice(0, 6);
+
+  const getDestinationPackageCount = (dest: (typeof destinationsData)[0]) => {
+    const count = publishedPackages.filter((p) => {
+      const q = dest.name.toLowerCase();
+      const slug = dest.slug.toLowerCase();
+      return (
+        p.destinationName.toLowerCase().includes(q) ||
+        q.includes(p.destinationName.toLowerCase()) ||
+        p.regionOrCountry.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(slug)
+      );
+    }).length;
+    return count;
+  };
 
   const categories = [
     {
@@ -49,24 +82,24 @@ export default function HomePage() {
 
   const whyChooseUs = [
     {
-      icon: <Users className="w-6 h-6 text-[#C25E34]" />,
-      title: 'Dedicated 24/7 On-Trip Concierge',
-      desc: 'You are connected with a designated trip manager on WhatsApp throughout your entire journey — from airport arrival to farewell.',
+      icon: <Phone className="w-6 h-6 text-[#C25E34]" />,
+      title: 'Convenient Enquiry Options',
+      desc: 'Connect easily with our team via direct phone call, WhatsApp, or through quick online enquiry forms.',
+    },
+    {
+      icon: <Compass className="w-6 h-6 text-[#C25E34]" />,
+      title: 'Domestic & Global Discovery',
+      desc: 'Thoughtfully presented holiday choices across premier Indian destinations and exciting international trips.',
     },
     {
       icon: <ShieldCheck className="w-6 h-6 text-[#C25E34]" />,
-      title: 'Zero Hidden Surcharges',
-      desc: 'Every fee, toll, driver allowance, and mandatory tax is explicitly clarified in writing before you pay a single rupee.',
+      title: 'Clear Package Communication',
+      desc: 'Transparent descriptions of day-wise itineraries, verified accommodation tiers, and inclusions shared upfront.',
     },
     {
-      icon: <HeartHandshake className="w-6 h-6 text-[#C25E34]" />,
-      title: 'Curated Stays & Vetted Chauffeurs',
-      desc: 'We personally inspect boutique heritage properties and employ background-verified, licensed drivers who respect your family privacy.',
-    },
-    {
-      icon: <Clock className="w-6 h-6 text-[#C25E34]" />,
-      title: '100% Flexible & Handcrafted Pace',
-      desc: 'No rushed group bus tours. Your daily sightseeing schedule is customized to your preferred wake-up times and meal choices.',
+      icon: <Users className="w-6 h-6 text-[#C25E34]" />,
+      title: 'Personalized Travel Planning',
+      desc: 'Attentive assistance to understand your schedule, group requirements, and destination preferences.',
     },
   ];
 
@@ -75,51 +108,85 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 2: CINEMATIC HERO
       ======================================================== */}
-      <section className="relative h-[85vh] min-h-[580px] max-h-[800px] w-full flex items-center justify-center overflow-hidden">
-        {/* Background Image with warm gradient overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=2000&q=85"
-            alt="Scenic mountain valley in high definition"
+      <section className="relative min-h-[540px] h-[78vh] max-h-[690px] w-full flex items-center justify-center overflow-hidden">
+        {/* Background Video with uniform cinematic tint */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
             className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0F1E20]/90 via-[#0F1E20]/60 to-black/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-transparent opacity-90 h-32 bottom-0" />
+          >
+            <source src="/videos/hero-travel.mp4" type="video/mp4" />
+          </video>
+          {/* Uniform dark tint across the video for pristine contrast */}
+          <div className="absolute inset-0 bg-slate-950/45" />
+          {/* Subtle top dark fade */}
+          <div className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-[#0A1E20]/80 to-transparent pointer-events-none" />
+          {/* Soft, minimal bottom transition without any milky/white haze */}
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FAF8F5]/40 to-transparent pointer-events-none" />
         </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-8 text-center text-white space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase font-semibold text-[#F3EFEA]">
-            <Sparkles className="w-3.5 h-3.5 text-[#C58B3E]" />
-            <span>Handcrafted Holidays • Indian & Global Escapes</span>
+        {/* Hero Content - balanced vertical position */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-8 text-center text-white space-y-4 sm:space-y-5 -mt-6 sm:-mt-8">
+          {/* Official Agency Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-amber-300/35 text-[11px] sm:text-xs tracking-[0.22em] uppercase font-semibold text-amber-100 shadow-xl">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+            <span>Discover the World. Experience More.</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-luxury font-bold tracking-tight text-white leading-[1.1] max-w-4xl mx-auto">
-            Travel That Feels Extraordinary.
+          {/* Official Headline */}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif-luxury font-bold tracking-tight text-white leading-[1.12] max-w-4xl mx-auto drop-shadow-md">
+            Your Next Journey{' '}
+            <span className="font-serif-luxury italic font-normal bg-gradient-to-r from-amber-200 via-orange-100 to-amber-300 bg-clip-text text-transparent">
+              Begins Here.
+            </span>
           </h1>
 
-          <p className="text-base sm:text-xl text-[#E2E8F0] font-light max-w-2xl mx-auto leading-relaxed">
-            From the tranquil pine valleys of Kashmir to the glistening peaks of Switzerland. Unrushed itineraries, verified luxury stays, and dedicated 24/7 care.
+          {/* Subtitle */}
+          <p className="text-sm sm:text-base md:text-lg text-slate-100 font-light max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
+            Explore extraordinary destinations across India and around the world with Tonfro Solution Tour and Travel.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-1">
             <Link
               href="/packages"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#C25E34] hover:bg-[#A74E28] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#C25E34] to-[#A74E28] hover:from-[#A74E28] hover:to-[#8E3F1E] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] group"
             >
-              <span>Explore Curated Packages</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Explore Destinations</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
 
             <a
               href={getWhatsAppLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/15 hover:bg-white/25 text-white backdrop-blur-md border border-white/30 text-xs font-semibold uppercase tracking-wider transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 text-white backdrop-blur-md border border-white/30 hover:border-emerald-400/50 text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
               <MessageCircle className="w-4 h-4 text-emerald-400" />
-              <span>Instant WhatsApp Advice</span>
+              <span>Plan Your Trip</span>
             </a>
+          </div>
+
+          {/* Authentic Trust Signals */}
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-4 sm:gap-7 text-[11px] sm:text-xs font-medium text-slate-200/90 drop-shadow-xs">
+            <span className="inline-flex items-center gap-1.5">
+              <Compass className="w-3.5 h-3.5 text-amber-300" />
+              <span>Tailored Domestic & Global Itineraries</span>
+            </span>
+            <span className="hidden sm:inline text-white/30">•</span>
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Verified Stays & Transparent Pricing</span>
+            </span>
+            <span className="hidden sm:inline text-white/30">•</span>
+            <span className="inline-flex items-center gap-1.5">
+              <HeartHandshake className="w-3.5 h-3.5 text-amber-300" />
+              <span>Dedicated 24/7 Trip Support</span>
+            </span>
           </div>
         </div>
       </section>
@@ -151,31 +218,33 @@ export default function HomePage() {
             href="/domestic"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#154D4F] hover:text-[#C25E34] transition-colors"
           >
-            <span>View All Domestic Packages ({domesticDestinations.length})</span>
+            <span>View All Domestic Packages ({domesticPackages.length})</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {domesticDestinations.slice(0, 4).map((dest) => (
-            <Link
-              key={dest.id}
-              href={`/packages?destination=${dest.slug}`}
-              className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
-            >
-              <img
-                src={dest.heroImage}
-                alt={dest.name}
-                className="w-full h-full object-cover card-zoom-image"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+          {domesticDestinations.slice(0, 4).map((dest) => {
+            const count = getDestinationPackageCount(dest);
+            return (
+              <Link
+                key={dest.id}
+                href={`/packages?destination=${dest.slug}`}
+                className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
+              >
+                <img
+                  src={dest.heroImage}
+                  alt={dest.name}
+                  className="w-full h-full object-cover card-zoom-image"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
-              <div className="absolute top-4 left-4">
-                <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
-                  {dest.packageCount} Itineraries
-                </span>
-              </div>
+                <div className="absolute top-4 left-4">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
+                    {count > 0 ? `${count} ${count === 1 ? 'Itinerary' : 'Itineraries'}` : '0 Itineraries'}
+                  </span>
+                </div>
 
               <div className="absolute bottom-5 left-5 right-5 text-white">
                 <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
@@ -193,7 +262,8 @@ export default function HomePage() {
                 </div>
               </div>
             </Link>
-          ))}
+          );
+        })}
         </div>
       </section>
 
@@ -220,31 +290,33 @@ export default function HomePage() {
               href="/international"
               className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#154D4F] hover:text-[#C25E34] transition-colors"
             >
-              <span>View All International Tours ({internationalDestinations.length})</span>
+              <span>View All International Tours ({internationalPackages.length})</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {internationalDestinations.slice(0, 4).map((dest) => (
-              <Link
-                key={dest.id}
-                href={`/packages?destination=${dest.slug}`}
-                className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
-              >
-                <img
-                  src={dest.heroImage}
-                  alt={dest.name}
-                  className="w-full h-full object-cover card-zoom-image"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+            {internationalDestinations.slice(0, 4).map((dest) => {
+              const count = getDestinationPackageCount(dest);
+              return (
+                <Link
+                  key={dest.id}
+                  href={`/packages?destination=${dest.slug}`}
+                  className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
+                >
+                  <img
+                    src={dest.heroImage}
+                    alt={dest.name}
+                    className="w-full h-full object-cover card-zoom-image"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
-                <div className="absolute top-4 left-4">
-                  <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
-                    {dest.packageCount} Itineraries
-                  </span>
-                </div>
+                  <div className="absolute top-4 left-4">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
+                      {count > 0 ? `${count} ${count === 1 ? 'Itinerary' : 'Itineraries'}` : '0 Itineraries'}
+                    </span>
+                  </div>
 
                 <div className="absolute bottom-5 left-5 right-5 text-white">
                   <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
@@ -262,7 +334,8 @@ export default function HomePage() {
                   </div>
                 </div>
               </Link>
-            ))}
+            );
+          })}
           </div>
         </div>
       </section>
@@ -284,11 +357,22 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredPackages.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
-          ))}
-        </div>
+        {displayPackages.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {displayPackages.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 px-6 bg-white rounded-2xl border border-[#E8E3DA] shadow-xs max-w-lg mx-auto space-y-2">
+            <p className="text-base font-serif-luxury font-bold text-[#0F172A]">
+              No Active Packages Currently Listed
+            </p>
+            <p className="text-xs text-[#64748B] leading-relaxed">
+              New holiday packages are being updated. You can still design a personalized itinerary by contacting our travel desk.
+            </p>
+          </div>
+        )}
 
         <div className="mt-12 text-center">
           <Link
@@ -441,11 +525,11 @@ export default function HomePage() {
               </div>
 
               <h2 className="text-3xl sm:text-5xl font-serif-luxury font-bold leading-tight">
-                Plan Your Private Journey With Our Specialists
+                Let&apos;s Plan Your Next Adventure.
               </h2>
 
               <p className="text-sm text-[#94A3B8] leading-relaxed">
-                Have specific dates in mind, traveling with elderly parents or seeking a private helicopter transfer? Share your preferences and receive an unhurried, day-wise proposal.
+                Have specific dates in mind, traveling with family or seeking a customized holiday? Share your travel plans with Tonfro Solution Tour and Travel and receive a detailed, personalized itinerary.
               </p>
 
               <div className="space-y-4 pt-2">

@@ -25,14 +25,14 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* Real Data Notice Banner for Easy Customization */}
-        <div className="p-6 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs text-amber-950 space-y-2">
-          <div className="flex items-center gap-2 font-bold text-amber-900 text-sm">
-            <ShieldCheck className="w-4 h-4 text-[#C25E34]" />
-            <span>Company Information Ready for Your Brand Details</span>
+        {/* Company Profile Card */}
+        <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E8E3DA] shadow-xs space-y-3">
+          <div className="flex items-center gap-2 font-bold text-[#154D4F] text-base font-serif-luxury">
+            <ShieldCheck className="w-5 h-5 text-[#C25E34]" />
+            <span>Tonfro Solution Tour and Travel — New Delhi</span>
           </div>
-          <p className="leading-relaxed">
-            All company credentials, registration numbers, director bios, and office locations on this website are driven by a single file: <code className="bg-amber-100 px-2 py-0.5 rounded font-mono text-[#154D4F]">src/config/agency.ts</code>. When your company registration documents, GSTIN, and official address are ready, simply update that configuration file to instantly update all pages across the website.
+          <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
+            Headquartered at Vats Market, Pitampura, New Delhi, <strong>Tonfro Solution Tour and Travel</strong> was founded to provide transparent, reliable, and thoughtful travel planning for families, couples, group departures, and independent explorers. Whether you are discovering the scenic hills and heritage of India or embarking on an international adventure, our dedicated team crafts itineraries with care, verified accommodations, and round-the-clock support.
           </p>
         </div>
 

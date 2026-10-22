@@ -3,14 +3,12 @@
  * 🏢 COMPANY & AGENCY CONFIGURATION (SINGLE SOURCE OF TRUTH)
  * =========================================================================
  * 
- * IMPORTANT: You can easily update your company details right here!
- * All components, navigation menus, footers, WhatsApp links, and enquiry forms
- * automatically pull from this file.
- * 
- * When your company details are ready:
- * 1. Change `companyName`, `shortName`, `tagline` below.
- * 2. Update `phone`, `whatsappNumber`, and `email`.
- * 3. Update office address, registered certifications, and social links.
+ * Official Company Details:
+ * Tonfro Solution Tour and Travel
+ * Primary Market: India (Domestic & International Travel)
+ * Contact Number: +91 8796969992
+ * Business Email: Tonfrosolutionpvtltd@gmail.com
+ * Address: Office No. 304, Third Floor, Khasra No. 502/348, Vats Market, Pitampura Village, New Delhi, Delhi – 110034, India
  * 
  * =========================================================================
  */
@@ -28,7 +26,7 @@ export interface AgencyConfig {
     primaryPhone: string;
     displayPhone: string;
     secondaryPhone?: string;
-    whatsappNumber: string; // International format without '+' e.g., '919876543210'
+    whatsappNumber: string; // International format without '+' e.g. '918796969992'
     whatsappDisplay: string;
     email: string;
     bookingEmail: string;
@@ -41,6 +39,7 @@ export interface AgencyConfig {
       state: string;
       pincode: string;
       country: string;
+      landmark?: string;
       mapEmbedUrl?: string;
     };
     branchOffices?: Array<{
@@ -50,7 +49,7 @@ export interface AgencyConfig {
     }>;
   };
 
-  // Legal, Trust & Accreditations (Clearly labeled)
+  // Legal, Trust & Accreditations
   accreditations: {
     gstNumberPlaceholder: string;
     cinPlaceholder?: string;
@@ -88,76 +87,74 @@ export interface AgencyConfig {
 }
 
 export const agencyConfig: AgencyConfig = {
-  companyName: "Vana & Vistas Journeys",
-  legalEntityName: "Vana & Vistas Holidays Pvt. Ltd. (Sample Registered Entity)",
-  shortName: "Vana & Vistas",
-  tagline: "Curated Indian & International Journeys, Handcrafted With Soul",
+  companyName: "Tonfro Solution Tour and Travel",
+  legalEntityName: "Tonfro Solution Tour and Travel",
+  shortName: "Tonfro Travel",
+  tagline: "Discover the World. Experience More.",
   description:
-    "We design immersive, high-comfort holidays across the Indian subcontinent and world-renowned global destinations. With zero hidden fees, verified luxury stays, and dedicated 24/7 on-trip concierge care.",
-  establishedYear: 2018,
+    "Tonfro Solution Tour and Travel helps travellers explore domestic and international destinations through thoughtfully presented holiday options and personalized travel enquiries. Discover destinations, explore travel packages, and connect with our team to plan your next journey.",
+  establishedYear: 2024,
 
   contact: {
-    primaryPhone: "+919876543210",
-    displayPhone: "+91 98765 43210",
-    secondaryPhone: "+91 11 4050 6070",
-    whatsappNumber: "919876543210", // 91 + 10 digits (no spaces or plus)
-    whatsappDisplay: "+91 98765 43210",
-    email: "holidays@vanavistas.com",
-    bookingEmail: "bookings@vanavistas.com",
-    supportEmail: "concierge@vanavistas.com",
-    workingHours: "Monday – Saturday: 9:30 AM to 7:30 PM IST (24/7 on-trip assistance)",
+    primaryPhone: "+918796969992",
+    displayPhone: "+91 8796969992",
+    secondaryPhone: "+91 8796969992",
+    whatsappNumber: "918796969992", // 91 + 10 digits
+    whatsappDisplay: "+91 8796969992",
+    email: "Tonfrosolutionpvtltd@gmail.com",
+    bookingEmail: "Tonfrosolutionpvtltd@gmail.com",
+    supportEmail: "Tonfrosolutionpvtltd@gmail.com",
+    workingHours: "Monday – Saturday: 9:30 AM to 7:00 PM IST",
     officeAddress: {
-      street: "Suite 402, Signature Pinnacle, M.G. Road",
-      locality: "Indiranagar",
-      city: "Bengaluru",
-      state: "Karnataka",
-      pincode: "560038",
+      street: "Office No. 304, Third Floor, Khasra No. 502/348",
+      locality: "Vats Market, Pitampura Village",
+      city: "New Delhi",
+      state: "Delhi",
+      pincode: "110034",
       country: "India",
+      landmark: "Vats Market",
     },
     branchOffices: [
       {
-        city: "New Delhi",
-        address: "Level 3, Connaught Place Outer Circle, New Delhi 110001",
-        phone: "+91 11 4050 6071",
-      },
-      {
-        city: "Mumbai",
-        address: "Bandra Kurla Complex, G-Block, Mumbai 400051",
-        phone: "+91 22 6120 8090",
+        city: "New Delhi (Head Office)",
+        address: "Office No. 304, Third Floor, Khasra No. 502/348, Vats Market, Pitampura Village, New Delhi, Delhi – 110034, India",
+        phone: "+91 8796969992",
       },
     ],
   },
 
   accreditations: {
-    gstNumberPlaceholder: "29AAAAA0000A1Z5 (Demo GSTIN)",
-    cinPlaceholder: "U63040KA2018PTC112233",
-    iataMember: true,
-    ministryOfTourismApproved: true,
-    registeredAgencyBadgeText: "Verified Tour Operator • MoT & IATA Accredited Partner",
-    trustNote: "Sample company data displayed. Replace with verified business details in agency.ts",
+    gstNumberPlaceholder: "Registered in New Delhi, India",
+    cinPlaceholder: "Tour and Travel Agency",
+    iataMember: false,
+    ministryOfTourismApproved: false,
+    registeredAgencyBadgeText: "Registered Tour & Travel Operator • New Delhi, India",
+    trustNote: "Official verified details for Tonfro Solution Tour and Travel",
   },
 
   socials: {
-    instagram: "https://instagram.com/sample_travel_agency",
-    facebook: "https://facebook.com/sample_travel_agency",
-    youtube: "https://youtube.com/@sample_travel_agency",
-    linkedin: "https://linkedin.com/company/sample-travel-agency",
+    instagram: "https://instagram.com/",
+    facebook: "https://facebook.com/",
+    youtube: "https://youtube.com/",
+    linkedin: "https://linkedin.com/",
   },
 
   seo: {
-    siteUrl: "https://vanavistas.com",
-    defaultTitle: "Vana & Vistas | Premium Indian & International Holiday Experiences",
-    titleTemplate: "%s | Vana & Vistas Journeys",
+    siteUrl: "https://tonfrosolution.com",
+    defaultTitle: "Tonfro Solution Tour and Travel | Domestic & International Holidays",
+    titleTemplate: "%s | Tonfro Solution Tour and Travel",
     defaultDescription:
-      "Explore handcrafted domestic holidays across Kashmir, Kerala, Ladakh, Rajasthan and bespoke international tours to Switzerland, Bali, Dubai, Vietnam & Europe.",
+      "Explore domestic and international holiday destinations with Tonfro Solution Tour and Travel. Discover travel packages and contact our team to enquire about your next trip.",
     ogImage: "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?q=80&w=1200&auto=format&fit=crop",
     keywords: [
-      "luxury travel agency India",
+      "Tonfro Solution Tour and Travel",
+      "travel agency New Delhi",
+      "Pitampura travel agency",
+      "domestic holiday packages",
+      "international holiday packages",
       "Kashmir tour packages",
-      "Kerala backwater packages",
-      "Europe holiday packages from India",
-      "Bali honeymoon tour",
-      "Dubai luxury holiday",
+      "Kerala holiday packages",
+      "Dubai tour packages",
       "customized tour operator India",
     ],
   },
@@ -165,15 +162,15 @@ export const agencyConfig: AgencyConfig = {
   whatsappTemplates: {
     generalEnquiry: (name?: string) =>
       encodeURIComponent(
-        `Hello ${name ? name : "Vana & Vistas Team"}! I am planning a holiday and would like to speak with a travel specialist regarding your holiday packages.`
+        `Hello Tonfro Solution Tour and Travel, I would like to enquire about your travel packages. Please share the available options and details.`
       ),
     packageEnquiry: (packageTitle: string, duration: string) =>
       encodeURIComponent(
-        `Hello! I am interested in booking the "${packageTitle}" (${duration}). Please share the detailed itinerary, available dates, and best quote.`
+        `Hello Tonfro Solution Tour and Travel, I am interested in booking the "${packageTitle}" (${duration}). Please share the available dates, itinerary, and best quote.`
       ),
     customTripEnquiry: (destination: string, dates?: string) =>
       encodeURIComponent(
-        `Hello! I'd like to plan a custom trip to ${destination}${dates ? ` around ${dates}` : ""}. Could you connect me with a destination curator?`
+        `Hello Tonfro Solution Tour and Travel, I would like to plan a custom trip to ${destination}${dates ? ` around ${dates}` : ""}. Could you connect me with a consultant?`
       ),
   },
 };

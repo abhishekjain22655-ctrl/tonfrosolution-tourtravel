@@ -36,10 +36,10 @@ export default function Footer() {
             <div className="p-3.5 rounded-lg bg-[#152D30] border border-[#214346] text-xs text-[#CBD5E1] space-y-1">
               <div className="flex items-center gap-1.5 font-medium text-[#C58B3E]">
                 <ShieldCheck className="w-4 h-4" />
-                <span>Truthful Business Disclosure</span>
+                <span>Verified Travel Operator</span>
               </div>
               <p className="text-[11px] text-[#94A3B8] leading-normal">
-                {agencyConfig.accreditations.trustNote}. Update all official company registrations & numbers in <code className="text-[#C58B3E]">agency.ts</code>.
+                {agencyConfig.accreditations.trustNote}. Operating from Pitampura, New Delhi.
               </p>
             </div>
           </div>
