@@ -123,12 +123,44 @@ export default function AdminPage() {
   const [confirmPasscode, setConfirmPasscode] = useState('');
   const [passwordMsg, setPasswordMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // 15-minute inactivity auto-lock & exit cleanup ("if admin panel is off make it lock")
   useEffect(() => {
-    const session = sessionStorage.getItem('vv_staff_session');
-    if (session === 'active') {
-      setIsAuthenticated(true);
-      loadAdminData();
-    }
+    if (!isAuthenticated) return;
+
+    let timeoutId: NodeJS.Timeout;
+    const INACTIVITY_LIMIT_MS = 15 * 60 * 1000; // 15 minutes of idle auto-locks
+
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        sessionStorage.removeItem('vv_staff_session');
+        setIsAuthenticated(false);
+        setPasscode('');
+        setAuthError('Console auto-locked after 15 minutes of inactivity for security.');
+      }, INACTIVITY_LIMIT_MS);
+    };
+
+    const userActivityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
+    userActivityEvents.forEach((evt) => window.addEventListener(evt, resetTimer, { passive: true }));
+    resetTimer();
+
+    // Auto-lock when closing tab, browser, or navigating away ("if admin panel is off make it lock")
+    const handleExitLock = () => {
+      sessionStorage.removeItem('vv_staff_session');
+    };
+    window.addEventListener('beforeunload', handleExitLock);
+    window.addEventListener('pagehide', handleExitLock);
+
+    return () => {
+      clearTimeout(timeoutId);
+      userActivityEvents.forEach((evt) => window.removeEventListener(evt, resetTimer));
+      window.removeEventListener('beforeunload', handleExitLock);
+      window.removeEventListener('pagehide', handleExitLock);
+    };
+  }, [isAuthenticated]);
+
+  // Check lockout timer on initial load
+  useEffect(() => {
     try {
       const lockUntil = localStorage.getItem('vv_admin_lockout_until');
       if (lockUntil) {
@@ -254,6 +286,7 @@ export default function AdminPage() {
     sessionStorage.removeItem('vv_staff_session');
     setIsAuthenticated(false);
     setPasscode('');
+    setAuthError('Console locked. Enter your passcode to unlock.');
   };
 
   const handleStatusChange = (id: string, newStatus: CustomerEnquiry['status']) => {
@@ -715,40 +748,41 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-[#F5F2EB]">
       {/* Top Admin Bar */}
-      <header className="bg-[#0F1E20] text-white px-4 sm:px-8 py-3.5 border-b border-[#1B4D4F]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#C25E34] flex items-center justify-center text-white font-bold">
+      <header className="bg-[#0F1E20] text-white px-3 sm:px-8 py-2.5 sm:py-3.5 border-b border-[#1B4D4F] sticky top-0 z-30 shadow-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-[#C25E34] flex items-center justify-center text-white font-bold shrink-0 shadow-xs">
               <Compass className="w-5 h-5" />
             </div>
-            <div>
-              <span className="text-sm font-bold text-white block">
+            <div className="truncate">
+              <span className="text-xs sm:text-sm font-bold text-white block truncate">
                 {agencyConfig.companyName} Console
               </span>
-              <span className="text-[10px] text-[#C58B3E] font-medium tracking-wider uppercase">
-                Staff & Lead Administration
+              <span className="text-[9px] sm:text-[10px] text-[#C58B3E] font-medium tracking-wider uppercase block">
+                Staff Portal
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4 text-xs">
+          <div className="flex items-center gap-2 sm:gap-3 text-xs shrink-0">
             {/* Database Status Indicator */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-medium border bg-white/5 border-white/10">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-medium border bg-white/5 border-white/10">
               <span
-                className={`w-2 h-2 rounded-full ${
+                className={`w-2 h-2 rounded-full shrink-0 ${
                   dbStatus.connected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
                 }`}
               />
               <span className="text-[#CBD5E1]">
                 {dbStatus.connected ? (
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-emerald-300 font-semibold">MongoDB Atlas</span>
-                    <span className="text-[#94A3B8]">
-                      ({dbStatus.stats?.packages ?? packagesList.length} trips)
+                  <span className="flex items-center gap-1">
+                    <span className="text-emerald-300 font-semibold hidden sm:inline">MongoDB Atlas</span>
+                    <span className="text-emerald-300 font-semibold sm:hidden">Atlas</span>
+                    <span className="text-[#94A3B8] text-[10px] sm:text-[11px]">
+                      ({dbStatus.stats?.packages ?? packagesList.length})
                     </span>
                   </span>
                 ) : (
-                  <span className="text-amber-300">Local Mode (DB offline)</span>
+                  <span className="text-amber-300">Offline</span>
                 )}
               </span>
               <button
@@ -765,25 +799,28 @@ export default function AdminPage() {
             <Link
               href="/"
               target="_blank"
-              className="hidden sm:flex items-center gap-1.5 text-[#CBD5E1] hover:text-white transition-colors"
+              className="hidden md:flex items-center gap-1.5 text-[#CBD5E1] hover:text-white transition-colors"
             >
               <span>View Website</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
+
+            {/* Lock Console Button */}
             <button
               type="button"
               onClick={handleLogout}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-[#CBD5E1] hover:text-white transition-colors"
+              title="Lock Admin Console"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-rose-200 hover:text-white border border-rose-500/30 transition-all font-semibold text-xs active:scale-95"
             >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Logout</span>
+              <Lock className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+              <span>Lock</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Admin Body */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-8 py-5 sm:py-8 space-y-5 sm:space-y-6">
         {packageSuccessMsg && (
           <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2 shadow-xs">
             <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -791,44 +828,44 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 border-b border-[#E8E3DA] pb-2">
+        {/* Navigation Tabs - Horizontal Touch Scrollable on Mobile */}
+        <div className="flex items-center gap-2 border-b border-[#E8E3DA] pb-2 overflow-x-auto no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
           <button
             type="button"
             onClick={() => setActiveTab('enquiries')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all shrink-0 whitespace-nowrap ${
               activeTab === 'enquiries'
                 ? 'bg-[#154D4F] text-white shadow-sm'
-                : 'text-[#475569] hover:bg-white'
+                : 'text-[#475569] hover:bg-white bg-white/60 sm:bg-transparent'
             }`}
           >
-            <Users className="w-4 h-4" />
-            <span>Customer Enquiries ({enquiries.length})</span>
+            <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span>Enquiries ({enquiries.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('packages')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all shrink-0 whitespace-nowrap ${
               activeTab === 'packages'
                 ? 'bg-[#154D4F] text-white shadow-sm'
-                : 'text-[#475569] hover:bg-white'
+                : 'text-[#475569] hover:bg-white bg-white/60 sm:bg-transparent'
             }`}
           >
-            <PackageIcon className="w-4 h-4" />
-            <span>Manage Trips & Packages ({packagesList.length})</span>
+            <PackageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span>Trips & Packages ({packagesList.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('settings')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all shrink-0 whitespace-nowrap ${
               activeTab === 'settings'
                 ? 'bg-[#154D4F] text-white shadow-sm'
-                : 'text-[#475569] hover:bg-white'
+                : 'text-[#475569] hover:bg-white bg-white/60 sm:bg-transparent'
             }`}
           >
-            <Settings className="w-4 h-4" />
+            <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Security & Passcode</span>
           </button>
         </div>
@@ -838,7 +875,7 @@ export default function AdminPage() {
         ==================================================== */}
         {activeTab === 'enquiries' && (
           <div className="space-y-6">
-            <div className="bg-white p-4 rounded-xl border border-[#E8E3DA] flex flex-col sm:flex-row gap-3 items-center justify-between">
+            <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-[#E8E3DA] flex flex-col sm:flex-row gap-2.5 sm:gap-3 items-stretch sm:items-center justify-between">
               <div className="relative w-full sm:w-72">
                 <Search className="w-4 h-4 absolute left-3 top-2.5 text-[#94A3B8]" />
                 <input
@@ -846,18 +883,18 @@ export default function AdminPage() {
                   placeholder="Search by name, phone, or destination..."
                   value={enquirySearch}
                   onChange={(e) => setEnquirySearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-[#E8E3DA] bg-[#FAF8F5] focus:bg-white focus:outline-none"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-[#E8E3DA] bg-[#FAF8F5] focus:bg-white focus:outline-none"
                 />
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <span className="text-xs text-[#64748B] font-medium">Status:</span>
+              <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto">
+                <span className="text-xs text-[#64748B] font-semibold shrink-0">Status:</span>
                 <select
                   value={enquiryStatusFilter}
                   onChange={(e) => setEnquiryStatusFilter(e.target.value)}
-                  className="text-xs rounded-lg border border-[#E8E3DA] py-1.5 px-3 bg-[#FAF8F5] focus:outline-none"
+                  className="text-xs rounded-lg border border-[#E8E3DA] py-2 px-3 bg-[#FAF8F5] focus:outline-none flex-1 sm:flex-initial"
                 >
-                  <option value="all">All Enquiries</option>
+                  <option value="all">All Enquiries ({enquiries.length})</option>
                   <option value="new">New</option>
                   <option value="contacted">Contacted</option>
                   <option value="quoted">Quoted</option>
@@ -1075,8 +1112,8 @@ export default function AdminPage() {
             TAB 2: PACKAGES MANAGEMENT (CRUD + LIVE REFLECTION)
         ==================================================== */}
         {activeTab === 'packages' && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-xl border border-[#E8E3DA]">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-xl border border-[#E8E3DA]">
               <div className="relative w-full sm:w-80">
                 <Search className="w-4 h-4 absolute left-3 top-2.5 text-[#94A3B8]" />
                 <input
@@ -1084,22 +1121,123 @@ export default function AdminPage() {
                   placeholder="Search packages by title or region..."
                   value={packageSearch}
                   onChange={(e) => setPackageSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-[#E8E3DA] bg-[#FAF8F5] focus:bg-white focus:outline-none"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-[#E8E3DA] bg-[#FAF8F5] focus:bg-white focus:outline-none"
                 />
               </div>
 
               <button
                 type="button"
                 onClick={handleOpenAdd}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-lg bg-[#C25E34] hover:bg-[#A74E28] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-lg bg-[#C25E34] hover:bg-[#A74E28] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm active:scale-95"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add New Trip</span>
               </button>
             </div>
 
-            {/* Packages Table */}
-            <div className="bg-white rounded-xl border border-[#E8E3DA] overflow-x-auto shadow-2xs">
+            {/* Mobile Card Grid (Phones & Small Screens) */}
+            <div className="md:hidden space-y-3">
+              {filteredPackages.length === 0 ? (
+                <div className="p-8 text-center bg-white rounded-xl border border-[#E8E3DA] text-xs text-[#64748B]">
+                  No packages found matching your search.
+                </div>
+              ) : (
+                filteredPackages.map((pkg) => (
+                  <div
+                    key={pkg.id}
+                    className="bg-white rounded-xl border border-[#E8E3DA] p-3.5 shadow-2xs space-y-3"
+                  >
+                    <div className="flex items-start gap-3">
+                      <img
+                        src={pkg.heroImage}
+                        alt={pkg.title}
+                        className="w-16 h-16 rounded-lg object-cover bg-slate-100 shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                          <span
+                            className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${
+                              pkg.destinationType === 'domestic'
+                                ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            }`}
+                          >
+                            {pkg.destinationType}
+                          </span>
+                          {pkg.badge && (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                              {pkg.badge}
+                            </span>
+                          )}
+                        </div>
+                        <h4 className="font-bold text-xs text-[#0F172A] leading-snug line-clamp-2">
+                          {pkg.title}
+                        </h4>
+                        <p className="text-[11px] text-[#64748B] mt-0.5">
+                          📍 {pkg.destinationName}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-[#F1ECE4] text-xs">
+                      <div>
+                        <span className="text-[10px] text-[#64748B] block uppercase tracking-wider font-medium">
+                          {pkg.durationDays}D / {pkg.durationNights}N
+                        </span>
+                        <span className="text-sm font-extrabold text-[#154D4F]">
+                          ₹{pkg.startingPriceINR.toLocaleString('en-IN')}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleTogglePackageStatus(pkg)}
+                        title="Click to toggle publish status"
+                        className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all border ${
+                          pkg.status === 'published'
+                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                            : 'bg-amber-100 text-amber-800 border-amber-300'
+                        }`}
+                      >
+                        {pkg.status === 'published' ? '● Published' : '○ Draft'}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#F1ECE4]">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEdit(pkg)}
+                        className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-[#154D4F]/10 hover:bg-[#154D4F] text-[#154D4F] hover:text-white text-xs font-semibold transition-colors"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>Edit</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeletePackage(pkg.slug, pkg.title)}
+                        className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white text-xs font-semibold transition-colors border border-rose-200"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Delete</span>
+                      </button>
+
+                      <Link
+                        href={`/packages/${pkg.slug}`}
+                        target="_blank"
+                        className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-[#FAF8F5] border border-[#E8E3DA] text-[#0F172A] hover:bg-[#C25E34] hover:text-white text-xs font-semibold transition-colors"
+                      >
+                        <span>Live</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Packages Table (Desktop & Tablet) */}
+            <div className="hidden md:block bg-white rounded-xl border border-[#E8E3DA] overflow-x-auto shadow-2xs">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#FAF8F5] border-b border-[#E8E3DA] text-[#475569] font-bold uppercase tracking-wider">
                   <tr>
@@ -1419,16 +1557,16 @@ export default function AdminPage() {
 
       {/* Modal: Create or Edit Package */}
       {showPackageModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-7 max-h-[92vh] overflow-y-auto space-y-4 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-[#E8E3DA]">
-              <h3 className="text-xl font-serif-luxury font-bold text-[#0F172A]">
+              <h3 className="text-lg sm:text-xl font-serif-luxury font-bold text-[#0F172A]">
                 {isEditing ? 'Edit Holiday Package' : 'Add New Trip to Website'}
               </h3>
               <button
                 type="button"
                 onClick={() => setShowPackageModal(false)}
-                className="text-[#64748B] hover:text-[#0F172A] p-1"
+                className="text-[#64748B] hover:text-[#0F172A] p-1.5 rounded-lg hover:bg-slate-100"
               >
                 ✕
               </button>
@@ -1449,7 +1587,7 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-semibold uppercase text-[#475569] mb-1">
                     Region Category *
@@ -1484,7 +1622,7 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-semibold uppercase text-[#475569] mb-1">
                     Duration (Days)
@@ -1528,7 +1666,7 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block font-semibold uppercase text-[#475569] mb-1">
                     Publish Status
@@ -1892,17 +2030,17 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="pt-3 flex justify-end gap-3 border-t border-[#E8E3DA]">
+              <div className="pt-3 flex flex-col-reverse sm:flex-row justify-end gap-2.5 border-t border-[#E8E3DA]">
                 <button
                   type="button"
                   onClick={() => setShowPackageModal(false)}
-                  className="px-4 py-2.5 rounded-lg border border-[#E8E3DA] text-xs font-semibold hover:bg-slate-50"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[#E8E3DA] text-xs font-semibold hover:bg-slate-50 text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-lg bg-[#C25E34] hover:bg-[#A74E28] text-white text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm"
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-[#C25E34] hover:bg-[#A74E28] text-white text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm text-center active:scale-95"
                 >
                   {isEditing ? 'Save Changes' : 'Publish Trip to Website'}
                 </button>
