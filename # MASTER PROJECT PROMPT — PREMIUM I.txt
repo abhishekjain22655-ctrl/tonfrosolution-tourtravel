@@ -1,0 +1,203 @@
+# MASTER PROJECT PROMPT — PREMIUM INDIAN TRAVEL AGENCY WEBSITE
+
+Act as a senior product designer, travel-industry UX specialist, full-stack developer and QA engineer.
+
+Build a complete, professional, modern travel agency website for an Indian travel company offering both domestic and international holiday packages.
+
+The goal is to create a premium travel brand experience that inspires visitors, builds trust, presents packages clearly and converts visitors into qualified customer enquiries.
+
+## 1. First, inspect and plan
+
+Before coding, inspect the existing project, dependencies, architecture and available assets.
+
+Create an implementation plan covering:
+- Page structure and user journeys.
+- Design system and reusable components.
+- Package and destination data structures.
+- Enquiry and WhatsApp workflows.
+- Admin capabilities and backend requirements.
+- SEO, accessibility, performance and testing.
+
+If an existing project is present, preserve working functionality and improve it instead of unnecessarily rebuilding everything.
+
+## 2. Visual direction
+
+Create a premium editorial travel experience inspired by high-end travel brands.
+
+Use:
+- Warm white or ivory backgrounds.
+- Deep navy or charcoal text.
+- A restrained teal or terracotta accent.
+- Elegant editorial headings and clean sans-serif body text.
+- High-quality cinematic destination photography.
+- Generous whitespace, precise alignment and a consistent spacing system.
+- Sophisticated destination cards with restrained borders and shadows.
+- A clean, professional footer.
+
+The result must look custom-designed, not like a generic travel template.
+
+Avoid excessive colors, excessive gradients, repetitive rounded cards, cluttered layouts, giant empty sections and unnecessary animations.
+
+## 3. Homepage
+
+Build the following sections in this order:
+
+1. Premium responsive navigation with logo, Domestic, International, Holiday Packages, About and Contact.
+2. A cinematic hero with a high-quality destination image or optimized video, compelling headline, supporting text and clear CTAs.
+3. A compact destination and trip-search interface.
+4. Popular domestic destinations.
+5. Popular international destinations.
+6. Featured holiday packages.
+7. Trip categories such as Family, Honeymoon, Adventure, Group Tours and Customized Holidays.
+8. Why travel with us, using only truthful and verifiable benefits.
+9. Customer testimonials and real travel experiences where available.
+10. A personalized trip-planning CTA and enquiry form.
+11. A complete footer with contact details, social links, policies and navigation.
+
+Do not fabricate company history, reviews, awards, registrations, prices or statistics. Use clearly identified sample data until real business information is supplied.
+
+## 4. Domestic and international packages
+
+Create separate browsable pages for domestic and international holidays.
+
+Provide filters for:
+- Destination.
+- Budget range.
+- Trip duration.
+- Travel category.
+- Available travel dates, when provided.
+
+Every package card must display:
+- Destination and package title.
+- Duration in nights and days.
+- Starting price in INR, if verified.
+- Suitable traveller type or trip category.
+- A clear View Package CTA.
+
+Create individual package detail pages containing:
+- Overview and destination gallery.
+- Duration and route.
+- Day-by-day itinerary.
+- Hotel category or confirmed accommodation details.
+- Inclusions and exclusions.
+- Starting price and pricing conditions.
+- Best travel season, when verified.
+- Cancellation and booking terms.
+- Related packages.
+- Enquire on WhatsApp and Call buttons.
+
+Never imply live availability or guaranteed prices without a real data source.
+
+## 5. Custom trip enquiry
+
+Create a simple, mobile-friendly form containing:
+- Full name.
+- Phone number with India as the default country.
+- Email, optional.
+- Domestic or international trip.
+- Destination or preferred region.
+- Departure city.
+- Preferred travel dates.
+- Number of adults and children.
+- Approximate budget.
+- Additional requirements.
+
+Validate inputs, show clear success and error states, prevent duplicate submissions and preserve user-entered data when a recoverable error occurs.
+
+Capture the originating package or page whenever relevant.
+
+The form must genuinely submit to a configured backend or a clearly documented temporary demo mode. Never display a fake successful submission.
+
+## 6. WhatsApp and phone integration
+
+Provide a floating WhatsApp button on mobile and appropriate WhatsApp CTAs throughout the website.
+
+Use a configurable business WhatsApp number and a properly encoded prefilled message that includes the package name or trip details.
+
+Add click-to-call links using a configurable business telephone number.
+
+Do not invent the agency's contact details. Use clearly labelled placeholders until supplied.
+
+## 7. Admin panel and backend
+
+If the project requires a full-stack implementation, use Next.js with TypeScript, Tailwind CSS and Supabase.
+
+Build an authenticated admin area where authorized staff can:
+- Create, edit, publish and archive packages.
+- Manage domestic and international destinations.
+- Update prices, duration, itineraries, images and inclusions.
+- Set availability or mark packages as enquiry-only.
+- Review enquiries and update their statuses.
+- Record follow-ups and notes.
+
+Use appropriate database relationships, input validation, server-side authorization and Row Level Security.
+
+Keep private credentials on the server. Never expose Supabase service-role keys in client code. Do not create insecure public admin routes.
+
+If backend credentials are unavailable, finish the frontend and document the exact integration steps. Do not claim that a backend is connected when it is not.
+
+## 8. Motion and interaction
+
+Use Framer Motion for lightweight interface animations and GSAP with ScrollTrigger only when a complex scroll sequence genuinely improves the experience.
+
+Include:
+- Subtle section reveals.
+- Gentle image transitions.
+- Refined hover and button states.
+- Smooth navigation and menu transitions.
+- Optional restrained hero motion.
+
+Respect reduced-motion preferences. Avoid excessive parallax, animation delays, scroll hijacking and animations that prevent users from interacting with content.
+
+## 9. Responsive design and accessibility
+
+Design mobile-first and test at phone, tablet and desktop widths.
+
+Provide:
+- Accessible navigation and form labels.
+- Keyboard-friendly controls.
+- Visible focus states.
+- Appropriate contrast.
+- Useful image alt text.
+- Clear loading, empty, success and error states.
+- Touch-friendly controls.
+
+The mobile experience is a primary product requirement, not an afterthought.
+
+## 10. SEO and performance
+
+Implement:
+- Descriptive page titles and meta descriptions.
+- Clean destination and package URLs.
+- Canonical URLs where appropriate.
+- Sitemap and robots configuration.
+- Structured data only where accurate and applicable.
+- Optimized responsive images.
+- Lazy loading for below-the-fold media.
+- Efficient font loading and code splitting.
+- Useful 404 and error pages.
+
+Keep itinerary content as readable webpage text rather than relying exclusively on PDFs or images.
+
+## 11. Development quality
+
+Use reusable components and typed data models. Keep the architecture maintainable and avoid unnecessary dependencies.
+
+Do not break existing working features. Do not hardcode business details across multiple components. Store configurable company details in one appropriate configuration source.
+
+Use realistic sample packages clearly marked as demonstration content. Never invent live booking data, testimonials or API integrations.
+
+## 12. Verification
+
+After implementation:
+- Run the project's available lint, type-check and build commands.
+- Fix errors introduced by the implementation.
+- Open the website in a browser and test the main journeys.
+- Verify navigation, filters, package pages, forms, WhatsApp URLs and telephone links.
+- Test responsive layouts and loading states.
+- Check console errors, accessibility basics and image loading.
+- Document missing credentials, external services and manual deployment steps.
+
+Do not stop after creating a plan or a static homepage. Work through the agreed implementation in stages, verify each stage and report what is actually functional.
+
+Begin by inspecting the project and presenting the implementation plan. Then proceed with the first implementation stage after the plan is clear.
