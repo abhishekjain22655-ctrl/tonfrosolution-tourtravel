@@ -18,9 +18,9 @@ export default function ScrollReveal({
   className = '',
   delay = 0,
   direction = 'up',
-  distance = 32,
-  duration = 750,
-  threshold = 0.15,
+  distance = 14,
+  duration = 380,
+  threshold = 0.05,
   once = true,
 }: ScrollRevealProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -51,7 +51,8 @@ export default function ScrollReveal({
       },
       {
         threshold,
-        rootMargin: '0px 0px -40px 0px', // triggers slightly before entering view
+        // Pre-triggers 80px before entering viewport so content is visible smoothly without delay
+        rootMargin: '80px 0px 40px 0px',
       }
     );
 
@@ -64,12 +65,12 @@ export default function ScrollReveal({
 
   // Compute transform offset based on direction
   const getTransform = () => {
-    if (isVisible) return 'translate3d(0, 0, 0) scale(1)';
+    if (isVisible) return 'translate3d(0, 0, 0)';
     switch (direction) {
       case 'up':
-        return `translate3d(0, ${distance}px, 0) scale(0.98)`;
+        return `translate3d(0, ${distance}px, 0)`;
       case 'down':
-        return `translate3d(0, -${distance}px, 0) scale(0.98)`;
+        return `translate3d(0, -${distance}px, 0)`;
       case 'left':
         return `translate3d(${distance}px, 0, 0)`;
       case 'right':

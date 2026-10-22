@@ -76,24 +76,25 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#FAF8F5]">
       {/* ========================================================
-          SECTION 2: CINEMATIC HERO (Protected Framing & Motion)
+          SECTION 2: CINEMATIC HERO (Protected Framing & Fast Render)
       ======================================================== */}
-      <section className="relative h-[90vh] min-h-[620px] max-h-[860px] w-full flex items-center justify-center overflow-hidden">
+      <section className="relative h-[88vh] min-h-[580px] max-h-[840px] w-full flex items-center justify-center overflow-hidden">
         {/* Background Image Container (Strictly Preserved) */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=2000&q=85"
+            src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=1800&q=80"
             alt="Scenic mountain valley in high definition"
             className="w-full h-full object-cover object-center"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0F1E20]/90 via-[#0F1E20]/60 to-black/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-transparent opacity-90 h-32 bottom-0" />
         </div>
 
-        {/* Hero Content with Smooth Entrance Motion */}
+        {/* Hero Content with Crisp, Fast Entrance */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-8 text-center text-white space-y-6">
           <div className="animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase font-semibold text-[#F3EFEA] shadow-md hover:bg-white/15 transition-colors">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase font-semibold text-[#F3EFEA] shadow-md">
               <Sparkles className="w-3.5 h-3.5 text-[#C58B3E] animate-float-slow" />
               <span>Handcrafted Holidays • Indian & Global Escapes</span>
             </div>
@@ -127,8 +128,8 @@ export default function HomePage() {
             </a>
           </div>
 
-          {/* Subtle Floating Scroll Down Indicator */}
-          <div className="pt-6 hidden sm:flex flex-col items-center justify-center text-white/70 animate-float-slow">
+          {/* Floating Scroll Indicator */}
+          <div className="pt-4 hidden sm:flex flex-col items-center justify-center text-white/70 animate-float-slow">
             <span className="text-[10px] uppercase font-semibold tracking-widest text-[#E2E8F0]/80">Scroll to Explore</span>
             <ChevronDown className="w-4 h-4 mt-0.5 text-[#C58B3E]" />
           </div>
@@ -138,16 +139,16 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 3: COMPACT TRIP SEARCH INTERFACE
       ======================================================== */}
-      <ScrollReveal direction="up" distance={35} duration={700}>
+      <ScrollReveal direction="up" distance={16} duration={350}>
         <TripSearchHero />
       </ScrollReveal>
 
       {/* ========================================================
           SECTION 4: POPULAR DOMESTIC DESTINATIONS
       ======================================================== */}
-      <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
-        <ScrollReveal direction="up" distance={24} duration={700}>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+      <section className="py-16 md:py-20 max-w-7xl mx-auto px-4 sm:px-8">
+        <ScrollReveal direction="up" distance={16} duration={350}>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#C25E34] mb-2">
                 <Compass className="w-3.5 h-3.5" />
@@ -173,7 +174,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {domesticDestinations.slice(0, 4).map((dest, idx) => (
-            <ScrollReveal key={dest.id} delay={idx * 120} direction="up" distance={30} duration={750}>
+            <ScrollReveal key={dest.id} delay={idx * 45} direction="up" distance={14} duration={350}>
               <Link
                 href={`/packages?destination=${dest.slug}`}
                 className="group block relative h-96 rounded-2xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
@@ -183,6 +184,7 @@ export default function HomePage() {
                   alt={dest.name}
                   className="w-full h-full object-cover card-zoom-image"
                   loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
@@ -216,10 +218,10 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 5: POPULAR INTERNATIONAL DESTINATIONS
       ======================================================== */}
-      <section className="py-20 md:py-24 bg-[#F5F2EB] border-y border-[#E8E3DA]">
+      <section className="py-16 md:py-20 bg-[#F5F2EB] border-y border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <ScrollReveal direction="up" distance={24} duration={700}>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+          <ScrollReveal direction="up" distance={16} duration={350}>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
               <div>
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#C25E34] mb-2">
                   <Compass className="w-3.5 h-3.5" />
@@ -245,7 +247,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {internationalDestinations.slice(0, 4).map((dest, idx) => (
-              <ScrollReveal key={dest.id} delay={idx * 120} direction="up" distance={30} duration={750}>
+              <ScrollReveal key={dest.id} delay={idx * 45} direction="up" distance={14} duration={350}>
                 <Link
                   href={`/packages?destination=${dest.slug}`}
                   className="group block relative h-96 rounded-2xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
@@ -255,6 +257,7 @@ export default function HomePage() {
                     alt={dest.name}
                     className="w-full h-full object-cover card-zoom-image"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
@@ -289,9 +292,9 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 6: FEATURED HOLIDAY PACKAGES
       ======================================================== */}
-      <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
-        <ScrollReveal direction="up" distance={24} duration={700}>
-          <div className="text-center max-w-2xl mx-auto mb-14">
+      <section className="py-16 md:py-20 max-w-7xl mx-auto px-4 sm:px-8">
+        <ScrollReveal direction="up" distance={16} duration={350}>
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#154D4F]/10 text-xs font-bold uppercase tracking-wider text-[#154D4F] mb-3">
               <Sparkles className="w-3.5 h-3.5 text-[#C25E34]" />
               <span>Handpicked Signature Packages</span>
@@ -307,14 +310,14 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredPackages.map((pkg, idx) => (
-            <ScrollReveal key={pkg.id} delay={idx * 130} direction="up" distance={35} duration={750}>
+            <ScrollReveal key={pkg.id} delay={idx * 50} direction="up" distance={16} duration={350}>
               <PackageCard pkg={pkg} />
             </ScrollReveal>
           ))}
         </div>
 
-        <ScrollReveal direction="up" distance={20} duration={600}>
-          <div className="mt-14 text-center">
+        <ScrollReveal direction="up" distance={14} duration={300}>
+          <div className="mt-12 text-center">
             <Link
               href="/packages"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-[#154D4F] text-[#154D4F] hover:bg-[#154D4F] hover:text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 active:scale-95 group shadow-sm hover:shadow-md"
@@ -329,10 +332,10 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 7: TRIP CATEGORIES & THEMES
       ======================================================== */}
-      <section className="py-20 md:py-24 bg-[#F5F2EB] border-t border-[#E8E3DA]">
+      <section className="py-16 md:py-20 bg-[#F5F2EB] border-t border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <ScrollReveal direction="up" distance={24} duration={700}>
-            <div className="text-center max-w-2xl mx-auto mb-12">
+          <ScrollReveal direction="up" distance={16} duration={350}>
+            <div className="text-center max-w-2xl mx-auto mb-10">
               <h2 className="text-3xl font-serif-luxury font-bold text-[#0F172A] mb-2">
                 Browse by Travel Experience
               </h2>
@@ -344,7 +347,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {categories.map((cat, idx) => (
-              <ScrollReveal key={cat.title} delay={idx * 90} direction="up" distance={25} duration={700}>
+              <ScrollReveal key={cat.title} delay={idx * 40} direction="up" distance={14} duration={350}>
                 <Link
                   href={`/packages?category=${encodeURIComponent(cat.slug)}`}
                   className="group relative h-72 rounded-xl overflow-hidden card-hover-lift border border-[#E8E3DA] block"
@@ -354,6 +357,7 @@ export default function HomePage() {
                     alt={cat.title}
                     className="w-full h-full object-cover card-zoom-image"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -374,9 +378,9 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 8: WHY TRAVEL WITH US (TRUTHFUL & VERIFIABLE)
       ======================================================== */}
-      <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
-        <ScrollReveal direction="up" distance={24} duration={700}>
-          <div className="text-center max-w-2xl mx-auto mb-14">
+      <section className="py-16 md:py-20 max-w-7xl mx-auto px-4 sm:px-8">
+        <ScrollReveal direction="up" distance={16} duration={350}>
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
               The {agencyConfig.shortName} Difference
             </span>
@@ -391,7 +395,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {whyChooseUs.map((pillar, idx) => (
-            <ScrollReveal key={idx} delay={idx * 110} direction="up" distance={30} duration={750}>
+            <ScrollReveal key={idx} delay={idx * 45} direction="up" distance={14} duration={350}>
               <div className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift h-full flex flex-col justify-between">
                 <div>
                   <div className="w-12 h-12 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA] flex items-center justify-center mb-4 text-[#C25E34]">
@@ -413,10 +417,10 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 9: CUSTOMER STORIES & EXPERIENCES
       ======================================================== */}
-      <section className="py-20 md:py-24 bg-[#FAF8F5] border-t border-[#E8E3DA]">
+      <section className="py-16 md:py-20 bg-[#FAF8F5] border-t border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <ScrollReveal direction="up" distance={24} duration={700}>
-            <div className="text-center max-w-2xl mx-auto mb-14">
+          <ScrollReveal direction="up" distance={16} duration={350}>
+            <div className="text-center max-w-2xl mx-auto mb-12">
               <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
                 Guest Experiences
               </span>
@@ -431,7 +435,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {sampleTestimonials.map((t, idx) => (
-              <ScrollReveal key={t.id} delay={idx * 110} direction="up" distance={30} duration={750}>
+              <ScrollReveal key={t.id} delay={idx * 45} direction="up" distance={14} duration={350}>
                 <div className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift flex flex-col justify-between h-full">
                   <div>
                     <div className="flex items-center gap-1 text-[#C58B3E] mb-3">
@@ -462,12 +466,12 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 10: CUSTOM TRIP PLANNING & ENQUIRY FORM
       ======================================================== */}
-      <section className="py-24 bg-[#0F1E20] text-white relative overflow-hidden">
+      <section className="py-20 md:py-24 bg-[#0F1E20] text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Callout and Guarantees */}
             <div className="lg:col-span-5 space-y-6">
-              <ScrollReveal direction="right" distance={30} duration={750}>
+              <ScrollReveal direction="right" distance={16} duration={350}>
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-xs font-semibold uppercase tracking-wider text-[#C58B3E] border border-white/15 mb-3">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Bespoke Travel Advisory</span>
@@ -525,7 +529,7 @@ export default function HomePage() {
 
             {/* Right Column: Interactive Form */}
             <div className="lg:col-span-7">
-              <ScrollReveal direction="left" distance={30} duration={800}>
+              <ScrollReveal direction="left" distance={16} duration={350}>
                 <EnquiryForm />
               </ScrollReveal>
             </div>
