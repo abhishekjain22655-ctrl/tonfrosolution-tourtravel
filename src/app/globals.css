@@ -13,10 +13,6 @@
   --terracotta: #C25E34;
   --terracotta-dark: #A74E28;
   --gold: #C58B3E;
-
-  /* Spacing Rhythm Tokens */
-  --section-py: clamp(4rem, 8vw, 6.5rem);
-  --section-gap: clamp(2rem, 5vw, 4rem);
 }
 
 body {
@@ -24,8 +20,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
 }
 
 /* Editorial Typography */
@@ -36,21 +30,21 @@ body {
 
 /* Subtle glassmorphism */
 .glass-nav {
-  background: rgba(250, 248, 245, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Custom smooth scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: #FAF8F5;
@@ -63,105 +57,10 @@ body {
   background: #C25E34;
 }
 
-/* ==========================================================
-   CINEMATIC ANIMATION & MOTION TOKENS (Phase 2 Enhancement)
-   ========================================================== */
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-/* Entrance utility classes with hardware acceleration */
-.animate-fade-in-up {
-  animation: fadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
-}
-
-.animate-fade-in-delay-1 {
-  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-.animate-fade-in-delay-2 {
-  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-.animate-fade-in-delay-3 {
-  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-.animate-float-slow {
-  animation: floatSlow 4s ease-in-out infinite;
-}
-
-/* Card image zoom effect within container */
+/* Image zoom effect on hover */
 .card-zoom-image {
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .group:hover .card-zoom-image {
   transform: scale(1.05);
-}
-
-/* Card elevation & shadow transition */
-.card-hover-lift {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
-  will-change: transform, box-shadow;
-}
-.card-hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 32px -8px rgba(15, 30, 32, 0.12);
-  border-color: #D9D2C7;
-}
-
-/* Accessible focus states */
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 2px solid #C25E34;
-  outline-offset: 2px;
-}
-
-/* Respect user's reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .card-hover-lift:hover {
-    transform: none !important;
-  }
-  .group:hover .card-zoom-image {
-    transform: none !important;
-  }
 }
