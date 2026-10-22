@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Compass, ShieldCheck, Clock, MapPin, Users, HeartHandshake, Sparkles, MessageCircle, Star, ChevronDown } from 'lucide-react';
@@ -8,6 +10,7 @@ import { sampleTestimonials } from '@/data/testimonials';
 import PackageCard from '@/components/PackageCard';
 import TripSearchHero from '@/components/TripSearchHero';
 import EnquiryForm from '@/components/EnquiryForm';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function HomePage() {
   const domesticDestinations = destinationsData.filter((d) => d.type === 'domestic');
@@ -75,8 +78,8 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 2: CINEMATIC HERO (Protected Framing & Motion)
       ======================================================== */}
-      <section className="relative h-[88vh] min-h-[600px] max-h-[820px] w-full flex items-center justify-center overflow-hidden">
-        {/* Background Image / Video Container (Strictly Preserved) */}
+      <section className="relative h-[90vh] min-h-[620px] max-h-[860px] w-full flex items-center justify-center overflow-hidden">
+        {/* Background Image Container (Strictly Preserved) */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=2000&q=85"
@@ -87,27 +90,27 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-transparent opacity-90 h-32 bottom-0" />
         </div>
 
-        {/* Hero Content with Staggered Entrance Motion */}
+        {/* Hero Content with Smooth Entrance Motion */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-8 text-center text-white space-y-6">
           <div className="animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase font-semibold text-[#F3EFEA] shadow-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase font-semibold text-[#F3EFEA] shadow-md hover:bg-white/15 transition-colors">
               <Sparkles className="w-3.5 h-3.5 text-[#C58B3E] animate-float-slow" />
               <span>Handcrafted Holidays • Indian & Global Escapes</span>
             </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-luxury font-bold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto animate-fade-in-delay-1">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-luxury font-bold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto animate-fade-in-delay-1 drop-shadow-sm">
             Travel That Feels Extraordinary.
           </h1>
 
-          <p className="text-base sm:text-xl text-[#E2E8F0] font-light max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
+          <p className="text-base sm:text-xl text-[#E2E8F0] font-light max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2 drop-shadow-xs">
             From the tranquil pine valleys of Kashmir to the glistening peaks of Switzerland. Unrushed itineraries, verified luxury stays, and dedicated 24/7 care.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 animate-fade-in-delay-3">
             <Link
               href="/packages"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#C25E34] hover:bg-[#A74E28] active:scale-95 text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-lg hover:shadow-2xl"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#C25E34] hover:bg-[#A74E28] active:scale-95 text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
             >
               <span>Explore Curated Packages</span>
               <ArrowRight className="w-4 h-4" />
@@ -117,11 +120,17 @@ export default function HomePage() {
               href={getWhatsAppLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 text-white backdrop-blur-md border border-white/30 text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 text-white backdrop-blur-md border border-white/30 text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-md hover:-translate-y-0.5"
             >
               <MessageCircle className="w-4 h-4 text-emerald-400" />
               <span>Instant WhatsApp Advice</span>
             </a>
+          </div>
+
+          {/* Subtle Floating Scroll Down Indicator */}
+          <div className="pt-6 hidden sm:flex flex-col items-center justify-center text-white/70 animate-float-slow">
+            <span className="text-[10px] uppercase font-semibold tracking-widest text-[#E2E8F0]/80">Scroll to Explore</span>
+            <ChevronDown className="w-4 h-4 mt-0.5 text-[#C58B3E]" />
           </div>
         </div>
       </section>
@@ -129,108 +138,43 @@ export default function HomePage() {
       {/* ========================================================
           SECTION 3: COMPACT TRIP SEARCH INTERFACE
       ======================================================== */}
-      <TripSearchHero />
+      <ScrollReveal direction="up" distance={35} duration={700}>
+        <TripSearchHero />
+      </ScrollReveal>
 
       {/* ========================================================
           SECTION 4: POPULAR DOMESTIC DESTINATIONS
       ======================================================== */}
       <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#C25E34] mb-2">
-              <Compass className="w-3.5 h-3.5" />
-              <span>Incredible India</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A]">
-              Popular Domestic Destinations
-            </h2>
-            <p className="text-sm text-[#64748B] mt-1 max-w-xl">
-              Immerse yourself in India’s timeless landscapes, royal palaces, tea plantations, and pristine mountain rivers.
-            </p>
-          </div>
-
-          <Link
-            href="/domestic"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#154D4F] hover:text-[#C25E34] transition-colors"
-          >
-            <span>View All Domestic Packages ({domesticDestinations.length})</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {domesticDestinations.slice(0, 4).map((dest) => (
-            <Link
-              key={dest.id}
-              href={`/packages?destination=${dest.slug}`}
-              className="group block relative h-96 rounded-2xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
-            >
-              <img
-                src={dest.heroImage}
-                alt={dest.name}
-                className="w-full h-full object-cover card-zoom-image"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-
-              <div className="absolute top-4 left-4">
-                <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/95 text-[#0F172A] backdrop-blur-sm shadow-2xs">
-                  {dest.packageCount} Itineraries
-                </span>
-              </div>
-
-              <div className="absolute bottom-5 left-5 right-5 text-white">
-                <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
-                  {dest.stateOrCountry}
-                </span>
-                <h3 className="text-2xl font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
-                  {dest.name}
-                </h3>
-                <p className="text-xs text-[#E2E8F0] line-clamp-2 mb-3 font-light">
-                  {dest.shortDescription}
-                </p>
-                <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs">
-                  <span className="text-[#CBD5E1]">Starting From</span>
-                  <span className="font-bold text-sm text-white">₹{dest.startingPriceINR.toLocaleString('en-IN')}</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ========================================================
-          SECTION 5: POPULAR INTERNATIONAL DESTINATIONS
-      ======================================================== */}
-      <section className="py-20 md:py-24 bg-[#F5F2EB] border-y border-[#E8E3DA]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+        <ScrollReveal direction="up" distance={24} duration={700}>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div>
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#C25E34] mb-2">
                 <Compass className="w-3.5 h-3.5" />
-                <span>Global Escapes</span>
+                <span>Incredible India</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A]">
-                Popular International Holidays
+                Popular Domestic Destinations
               </h2>
               <p className="text-sm text-[#64748B] mt-1 max-w-xl">
-                Bespoke European rail journeys, private Balinese pool villas, Arabian desert grandeur, and Vietnamese bays.
+                Immerse yourself in India’s timeless landscapes, royal palaces, tea plantations, and pristine mountain rivers.
               </p>
             </div>
 
             <Link
-              href="/international"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#154D4F] hover:text-[#C25E34] transition-colors"
+              href="/domestic"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#154D4F] hover:text-[#C25E34] transition-colors group"
             >
-              <span>View All International Tours ({internationalDestinations.length})</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>View All Domestic Packages ({domesticDestinations.length})</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
+        </ScrollReveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {internationalDestinations.slice(0, 4).map((dest) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {domesticDestinations.slice(0, 4).map((dest, idx) => (
+            <ScrollReveal key={dest.id} delay={idx * 120} direction="up" distance={30} duration={750}>
               <Link
-                key={dest.id}
                 href={`/packages?destination=${dest.slug}`}
                 className="group block relative h-96 rounded-2xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
               >
@@ -264,6 +208,79 @@ export default function HomePage() {
                   </div>
                 </div>
               </Link>
+            </ScrollReveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================
+          SECTION 5: POPULAR INTERNATIONAL DESTINATIONS
+      ======================================================== */}
+      <section className="py-20 md:py-24 bg-[#F5F2EB] border-y border-[#E8E3DA]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <ScrollReveal direction="up" distance={24} duration={700}>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#C25E34] mb-2">
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>Global Escapes</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A]">
+                  Popular International Holidays
+                </h2>
+                <p className="text-sm text-[#64748B] mt-1 max-w-xl">
+                  Bespoke European rail journeys, private Balinese pool villas, Arabian desert grandeur, and Vietnamese bays.
+                </p>
+              </div>
+
+              <Link
+                href="/international"
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#154D4F] hover:text-[#C25E34] transition-colors group"
+              >
+                <span>View All International Tours ({internationalDestinations.length})</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {internationalDestinations.slice(0, 4).map((dest, idx) => (
+              <ScrollReveal key={dest.id} delay={idx * 120} direction="up" distance={30} duration={750}>
+                <Link
+                  href={`/packages?destination=${dest.slug}`}
+                  className="group block relative h-96 rounded-2xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
+                >
+                  <img
+                    src={dest.heroImage}
+                    alt={dest.name}
+                    className="w-full h-full object-cover card-zoom-image"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+                  <div className="absolute top-4 left-4">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/95 text-[#0F172A] backdrop-blur-sm shadow-2xs">
+                      {dest.packageCount} Itineraries
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-5 left-5 right-5 text-white">
+                    <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
+                      {dest.stateOrCountry}
+                    </span>
+                    <h3 className="text-2xl font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
+                      {dest.name}
+                    </h3>
+                    <p className="text-xs text-[#E2E8F0] line-clamp-2 mb-3 font-light">
+                      {dest.shortDescription}
+                    </p>
+                    <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs">
+                      <span className="text-[#CBD5E1]">Starting From</span>
+                      <span className="font-bold text-sm text-white">₹{dest.startingPriceINR.toLocaleString('en-IN')}</span>
+                    </div>
+                  </div>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -273,34 +290,40 @@ export default function HomePage() {
           SECTION 6: FEATURED HOLIDAY PACKAGES
       ======================================================== */}
       <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#154D4F]/10 text-xs font-bold uppercase tracking-wider text-[#154D4F] mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-[#C25E34]" />
-            <span>Handpicked Signature Packages</span>
+        <ScrollReveal direction="up" distance={24} duration={700}>
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#154D4F]/10 text-xs font-bold uppercase tracking-wider text-[#154D4F] mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-[#C25E34]" />
+              <span>Handpicked Signature Packages</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A] mb-3">
+              Curated Journeys of Distinction
+            </h2>
+            <p className="text-sm text-[#64748B]">
+              Meticulously planned day-by-day itineraries featuring confirmed 4-star & boutique accommodations, private vehicles, and unforgettable experiences.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A] mb-3">
-            Curated Journeys of Distinction
-          </h2>
-          <p className="text-sm text-[#64748B]">
-            Meticulously planned day-by-day itineraries featuring confirmed 4-star & boutique accommodations, private vehicles, and unforgettable experiences.
-          </p>
-        </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredPackages.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
+          {featuredPackages.map((pkg, idx) => (
+            <ScrollReveal key={pkg.id} delay={idx * 130} direction="up" distance={35} duration={750}>
+              <PackageCard pkg={pkg} />
+            </ScrollReveal>
           ))}
         </div>
 
-        <div className="mt-14 text-center">
-          <Link
-            href="/packages"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-[#154D4F] text-[#154D4F] hover:bg-[#154D4F] hover:text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 active:scale-95"
-          >
-            <span>Browse Complete Holiday Portfolio</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+        <ScrollReveal direction="up" distance={20} duration={600}>
+          <div className="mt-14 text-center">
+            <Link
+              href="/packages"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-[#154D4F] text-[#154D4F] hover:bg-[#154D4F] hover:text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 active:scale-95 group shadow-sm hover:shadow-md"
+            >
+              <span>Browse Complete Holiday Portfolio</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* ========================================================
@@ -308,38 +331,41 @@ export default function HomePage() {
       ======================================================== */}
       <section className="py-20 md:py-24 bg-[#F5F2EB] border-t border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-serif-luxury font-bold text-[#0F172A] mb-2">
-              Browse by Travel Experience
-            </h2>
-            <p className="text-sm text-[#64748B]">
-              Whether celebrating a honeymoon, holidaying with multigenerational family, or seeking Himalayan high passes.
-            </p>
-          </div>
+          <ScrollReveal direction="up" distance={24} duration={700}>
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <h2 className="text-3xl font-serif-luxury font-bold text-[#0F172A] mb-2">
+                Browse by Travel Experience
+              </h2>
+              <p className="text-sm text-[#64748B]">
+                Whether celebrating a honeymoon, holidaying with multigenerational family, or seeking Himalayan high passes.
+              </p>
+            </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {categories.map((cat) => (
-              <Link
-                key={cat.title}
-                href={`/packages?category=${encodeURIComponent(cat.slug)}`}
-                className="group relative h-72 rounded-xl overflow-hidden card-hover-lift border border-[#E8E3DA]"
-              >
-                <img
-                  src={cat.image}
-                  alt={cat.title}
-                  className="w-full h-full object-cover card-zoom-image"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h3 className="text-lg font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
-                    {cat.title}
-                  </h3>
-                  <p className="text-[11px] text-[#CBD5E1] line-clamp-2 leading-relaxed">
-                    {cat.description}
-                  </p>
-                </div>
-              </Link>
+            {categories.map((cat, idx) => (
+              <ScrollReveal key={cat.title} delay={idx * 90} direction="up" distance={25} duration={700}>
+                <Link
+                  href={`/packages?category=${encodeURIComponent(cat.slug)}`}
+                  className="group relative h-72 rounded-xl overflow-hidden card-hover-lift border border-[#E8E3DA] block"
+                >
+                  <img
+                    src={cat.image}
+                    alt={cat.title}
+                    className="w-full h-full object-cover card-zoom-image"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <h3 className="text-lg font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
+                      {cat.title}
+                    </h3>
+                    <p className="text-[11px] text-[#CBD5E1] line-clamp-2 leading-relaxed">
+                      {cat.description}
+                    </p>
+                  </div>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -349,34 +375,37 @@ export default function HomePage() {
           SECTION 8: WHY TRAVEL WITH US (TRUTHFUL & VERIFIABLE)
       ======================================================== */}
       <section className="py-20 md:py-24 max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
-            The {agencyConfig.shortName} Difference
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A] mb-3">
-            Why Discerning Travelers Choose Us
-          </h2>
-          <p className="text-sm text-[#64748B]">
-            We operate with absolute transparency, verified hotel allocations, and authentic local partnerships across India and abroad.
-          </p>
-        </div>
+        <ScrollReveal direction="up" distance={24} duration={700}>
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
+              The {agencyConfig.shortName} Difference
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A] mb-3">
+              Why Discerning Travelers Choose Us
+            </h2>
+            <p className="text-sm text-[#64748B]">
+              We operate with absolute transparency, verified hotel allocations, and authentic local partnerships across India and abroad.
+            </p>
+          </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {whyChooseUs.map((pillar, idx) => (
-            <div
-              key={idx}
-              className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA] flex items-center justify-center mb-4 text-[#C25E34]">
-                {pillar.icon}
+            <ScrollReveal key={idx} delay={idx * 110} direction="up" distance={30} duration={750}>
+              <div className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift h-full flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA] flex items-center justify-center mb-4 text-[#C25E34]">
+                    {pillar.icon}
+                  </div>
+                  <h3 className="text-base font-bold text-[#0F172A] mb-2 font-serif-luxury">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-xs text-[#64748B] leading-relaxed">
+                    {pillar.desc}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-base font-bold text-[#0F172A] mb-2 font-serif-luxury">
-                {pillar.title}
-              </h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                {pillar.desc}
-              </p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>
@@ -386,44 +415,45 @@ export default function HomePage() {
       ======================================================== */}
       <section className="py-20 md:py-24 bg-[#FAF8F5] border-t border-[#E8E3DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
-              Guest Experiences
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A] mb-3">
-              Journeys Told by Our Travelers
-            </h2>
-            <p className="text-xs text-[#94A3B8]">
-              (Demonstration reviews shown until real company feedback is linked)
-            </p>
-          </div>
+          <ScrollReveal direction="up" distance={24} duration={700}>
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-2">
+                Guest Experiences
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-serif-luxury font-bold text-[#0F172A] mb-3">
+                Journeys Told by Our Travelers
+              </h2>
+              <p className="text-xs text-[#94A3B8]">
+                (Demonstration reviews shown until real company feedback is linked)
+              </p>
+            </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {sampleTestimonials.map((t) => (
-              <div
-                key={t.id}
-                className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center gap-1 text-[#C58B3E] mb-3">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
+            {sampleTestimonials.map((t, idx) => (
+              <ScrollReveal key={t.id} delay={idx * 110} direction="up" distance={30} duration={750}>
+                <div className="p-6 rounded-2xl bg-white border border-[#E8E3DA] card-hover-lift flex flex-col justify-between h-full">
+                  <div>
+                    <div className="flex items-center gap-1 text-[#C58B3E] mb-3">
+                      {[...Array(t.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current" />
+                      ))}
+                    </div>
+
+                    <p className="text-xs text-[#334155] leading-relaxed italic mb-4">
+                      &ldquo;{t.comment}&rdquo;
+                    </p>
                   </div>
 
-                  <p className="text-xs text-[#334155] leading-relaxed italic mb-4">
-                    &ldquo;{t.comment}&rdquo;
-                  </p>
+                  <div className="pt-4 border-t border-[#F1ECE4]">
+                    <p className="text-xs font-bold text-[#0F172A]">{t.customerName}</p>
+                    <p className="text-[11px] text-[#64748B]">{t.city}</p>
+                    <span className="inline-block mt-1 text-[10px] font-medium text-[#C25E34]">
+                      {t.tripTitle}
+                    </span>
+                  </div>
                 </div>
-
-                <div className="pt-4 border-t border-[#F1ECE4]">
-                  <p className="text-xs font-bold text-[#0F172A]">{t.customerName}</p>
-                  <p className="text-[11px] text-[#64748B]">{t.city}</p>
-                  <span className="inline-block mt-1 text-[10px] font-medium text-[#C25E34]">
-                    {t.tripTitle}
-                  </span>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -437,63 +467,67 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Callout and Guarantees */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-xs font-semibold uppercase tracking-wider text-[#C58B3E] border border-white/15">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Bespoke Travel Advisory</span>
-              </div>
+              <ScrollReveal direction="right" distance={30} duration={750}>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-xs font-semibold uppercase tracking-wider text-[#C58B3E] border border-white/15 mb-3">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Bespoke Travel Advisory</span>
+                </div>
 
-              <h2 className="text-3xl sm:text-5xl font-serif-luxury font-bold leading-tight">
-                Plan Your Private Journey With Our Specialists
-              </h2>
+                <h2 className="text-3xl sm:text-5xl font-serif-luxury font-bold leading-tight mb-4">
+                  Plan Your Private Journey With Our Specialists
+                </h2>
 
-              <p className="text-sm text-[#94A3B8] leading-relaxed">
-                Have specific dates in mind, traveling with elderly parents or seeking a private helicopter transfer? Share your preferences and receive an unhurried, day-wise proposal.
-              </p>
+                <p className="text-sm text-[#94A3B8] leading-relaxed mb-6">
+                  Have specific dates in mind, traveling with elderly parents or seeking a private helicopter transfer? Share your preferences and receive an unhurried, day-wise proposal.
+                </p>
 
-              <div className="space-y-4 pt-2">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1B4D4F] text-[#C58B3E] flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-4 h-4" />
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#1B4D4F] text-[#C58B3E] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+                        Guaranteed Privacy
+                      </h4>
+                      <p className="text-xs text-[#94A3B8]">
+                        Your telephone number is used solely to share your itinerary. Never sold to call centers.
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                      Guaranteed Privacy
-                    </h4>
-                    <p className="text-xs text-[#94A3B8]">
-                      Your telephone number is used solely to share your itinerary. Never sold to call centers.
-                    </p>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#1B4D4F] text-[#C58B3E] flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+                        Fast 2-Hour Working Response
+                      </h4>
+                      <p className="text-xs text-[#94A3B8]">
+                        Our destination curator connects with you directly with realistic hotel choices and route timings.
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1B4D4F] text-[#C58B3E] flex items-center justify-center shrink-0">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                      Fast 2-Hour Working Response
-                    </h4>
-                    <p className="text-xs text-[#94A3B8]">
-                      Our destination curator connects with you directly with realistic hotel choices and route timings.
-                    </p>
-                  </div>
+                <div className="pt-6 flex flex-wrap items-center gap-4 text-xs text-[#CBD5E1]">
+                  <span>Prefer to talk immediately?</span>
+                  <a
+                    href={getPhoneLink()}
+                    className="font-bold text-[#C58B3E] hover:underline"
+                  >
+                    Call {agencyConfig.contact.displayPhone}
+                  </a>
                 </div>
-              </div>
-
-              <div className="pt-4 flex flex-wrap items-center gap-4 text-xs text-[#CBD5E1]">
-                <span>Prefer to talk immediately?</span>
-                <a
-                  href={getPhoneLink()}
-                  className="font-bold text-[#C58B3E] hover:underline"
-                >
-                  Call {agencyConfig.contact.displayPhone}
-                </a>
-              </div>
+              </ScrollReveal>
             </div>
 
             {/* Right Column: Interactive Form */}
             <div className="lg:col-span-7">
-              <EnquiryForm />
+              <ScrollReveal direction="left" distance={30} duration={800}>
+                <EnquiryForm />
+              </ScrollReveal>
             </div>
           </div>
         </div>
