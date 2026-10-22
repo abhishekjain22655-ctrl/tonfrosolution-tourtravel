@@ -39,12 +39,15 @@ export default function PackageDetailClient({
   useEffect(() => {
     // Check storage for latest data (in case price or details were edited in Admin)
     const stored = getPackageBySlug(slug);
-    if (stored) {
-      setPkg(stored);
-      if (!activeImage) setActiveImage(stored.heroImage);
-    } else if (initialPackage) {
-      setPkg(initialPackage);
-      if (!activeImage) setActiveImage(initialPackage.heroImage);
+    const candidate = stored || initialPackage;
+    if (candidate && candidate.status && candidate.status !== 'published') {
+      // Draft package is hidden from the public website
+      setPkg(undefined);
+    } else if (candidate) {
+      setPkg(candidate);
+      if (!activeImage) setActiveImage(candidate.heroImage);
+    } else {
+      setPkg(undefined);
     }
 
     const allPub = getPublishedPackages();

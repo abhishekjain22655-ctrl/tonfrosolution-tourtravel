@@ -1,14 +1,44 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, MapPin, Calendar, Compass, ArrowRight, Sparkles } from 'lucide-react';
+import { getPublishedPackages } from '@/lib/storage';
 
 export default function TripSearchHero() {
   const router = useRouter();
   const [destination, setDestination] = useState('');
   const [tripType, setTripType] = useState('all');
   const [category, setCategory] = useState('all');
+  const [trendingItems, setTrendingItems] = useState([
+    { label: 'Kerala Backwaters', place: 'Kerala', type: 'domestic' as const },
+    { label: 'Swiss Alps', place: 'Switzerland', type: 'international' as const },
+    { label: 'Bali Villas', place: 'Bali', type: 'international' as const },
+    { label: 'Ladakh High Passes', place: 'Ladakh', type: 'domestic' as const },
+    { label: 'Royal Rajasthan', place: 'Rajasthan', type: 'domestic' as const },
+    { label: 'Dubai Luxury', place: 'Dubai', type: 'international' as const },
+  ]);
+
+  useEffect(() => {
+    try {
+      const pub = getPublishedPackages();
+      if (pub && pub.length > 0) {
+        const map = new Map<string, { label: string; place: string; type: 'domestic' | 'international' }>();
+        for (const p of pub) {
+          if (!map.has(p.destinationName)) {
+            map.set(p.destinationName, {
+              label: p.destinationName,
+              place: p.destinationName.split(' ')[0],
+              type: p.destinationType,
+            });
+          }
+        }
+        if (map.size > 0) {
+          setTrendingItems(Array.from(map.values()).slice(0, 6));
+        }
+      }
+    } catch {}
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,14 +136,7 @@ export default function TripSearchHero() {
             <Sparkles className="w-3 h-3 text-[#C58B3E]" />
             Trending:
           </span>
-          {[
-            { label: 'Kashmir Valley', place: 'Kashmir', type: 'domestic' as const },
-            { label: 'Kerala Backwaters', place: 'Kerala', type: 'domestic' as const },
-            { label: 'Swiss Alps', place: 'Switzerland', type: 'international' as const },
-            { label: 'Bali Villas', place: 'Bali', type: 'international' as const },
-            { label: 'Ladakh High Passes', place: 'Ladakh', type: 'domestic' as const },
-            { label: 'Dubai Luxury', place: 'Dubai', type: 'international' as const },
-          ].map((item) => (
+          {trendingItems.map((item) => (
             <button
               key={item.label}
               type="button"

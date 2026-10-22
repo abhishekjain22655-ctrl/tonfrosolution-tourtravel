@@ -33,8 +33,8 @@ export default function HomePage() {
   const featuredPackages = publishedPackages.filter((p) => p.featured);
   const displayPackages = featuredPackages.length > 0 ? featuredPackages : publishedPackages.slice(0, 6);
 
-  const getDestinationPackageCount = (dest: (typeof destinationsData)[0]) => {
-    const count = publishedPackages.filter((p) => {
+  const getDestinationPublishedPackages = (dest: (typeof destinationsData)[0]) => {
+    return publishedPackages.filter((p) => {
       const q = dest.name.toLowerCase();
       const slug = dest.slug.toLowerCase();
       return (
@@ -43,9 +43,20 @@ export default function HomePage() {
         p.regionOrCountry.toLowerCase().includes(q) ||
         p.slug.toLowerCase().includes(slug)
       );
-    }).length;
-    return count;
+    });
   };
+
+  const getDestinationPackageCount = (dest: (typeof destinationsData)[0]) => {
+    return getDestinationPublishedPackages(dest).length;
+  };
+
+  // Only show destinations that have active published packages
+  const activeDomesticDestinations = domesticDestinations.filter(
+    (dest) => getDestinationPackageCount(dest) > 0
+  );
+  const activeInternationalDestinations = internationalDestinations.filter(
+    (dest) => getDestinationPackageCount(dest) > 0
+  );
 
   const categories = [
     {
@@ -223,48 +234,63 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {domesticDestinations.slice(0, 4).map((dest) => {
-            const count = getDestinationPackageCount(dest);
-            return (
-              <Link
-                key={dest.id}
-                href={`/packages?destination=${dest.slug}`}
-                className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
-              >
-                <img
-                  src={dest.heroImage}
-                  alt={dest.name}
-                  className="w-full h-full object-cover card-zoom-image"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+        {activeDomesticDestinations.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {activeDomesticDestinations.slice(0, 4).map((dest) => {
+              const count = getDestinationPackageCount(dest);
+              const destPackages = getDestinationPublishedPackages(dest);
+              const minPrice =
+                destPackages.length > 0
+                  ? Math.min(...destPackages.map((p) => p.startingPriceINR))
+                  : dest.startingPriceINR;
 
-                <div className="absolute top-4 left-4">
-                  <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
-                    {count > 0 ? `${count} ${count === 1 ? 'Itinerary' : 'Itineraries'}` : '0 Itineraries'}
-                  </span>
-                </div>
+              return (
+                <Link
+                  key={dest.id}
+                  href={`/packages?destination=${dest.slug}`}
+                  className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
+                >
+                  <img
+                    src={dest.heroImage}
+                    alt={dest.name}
+                    className="w-full h-full object-cover card-zoom-image"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
-              <div className="absolute bottom-5 left-5 right-5 text-white">
-                <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
-                  {dest.stateOrCountry}
-                </span>
-                <h3 className="text-2xl font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
-                  {dest.name}
-                </h3>
-                <p className="text-xs text-[#E2E8F0] line-clamp-2 mb-3 font-light">
-                  {dest.shortDescription}
-                </p>
-                <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs">
-                  <span className="text-[#CBD5E1]">Starting From</span>
-                  <span className="font-bold text-sm text-white">₹{dest.startingPriceINR.toLocaleString('en-IN')}</span>
-                </div>
-              </div>
+                  <div className="absolute top-4 left-4">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
+                      {`${count} ${count === 1 ? 'Itinerary' : 'Itineraries'}`}
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-5 left-5 right-5 text-white">
+                    <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
+                      {dest.stateOrCountry}
+                    </span>
+                    <h3 className="text-2xl font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
+                      {dest.name}
+                    </h3>
+                    <p className="text-xs text-[#E2E8F0] line-clamp-2 mb-3 font-light">
+                      {dest.shortDescription}
+                    </p>
+                    <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs">
+                      <span className="text-[#CBD5E1]">Starting From</span>
+                      <span className="font-bold text-sm text-white">₹{minPrice.toLocaleString('en-IN')}</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="p-8 text-center bg-white rounded-2xl border border-[#E8E3DA] text-[#64748B]">
+            <p className="text-sm font-medium">New domestic itineraries are currently being updated.</p>
+            <Link href="/contact" className="mt-2 inline-block text-xs font-bold text-[#154D4F] underline">
+              Contact our concierge for custom domestic tours
             </Link>
-          );
-        })}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* ========================================================
@@ -295,48 +321,63 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {internationalDestinations.slice(0, 4).map((dest) => {
-              const count = getDestinationPackageCount(dest);
-              return (
-                <Link
-                  key={dest.id}
-                  href={`/packages?destination=${dest.slug}`}
-                  className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
-                >
-                  <img
-                    src={dest.heroImage}
-                    alt={dest.name}
-                    className="w-full h-full object-cover card-zoom-image"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+          {activeInternationalDestinations.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {activeInternationalDestinations.slice(0, 4).map((dest) => {
+                const count = getDestinationPackageCount(dest);
+                const destPackages = getDestinationPublishedPackages(dest);
+                const minPrice =
+                  destPackages.length > 0
+                    ? Math.min(...destPackages.map((p) => p.startingPriceINR))
+                    : dest.startingPriceINR;
 
-                  <div className="absolute top-4 left-4">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
-                      {count > 0 ? `${count} ${count === 1 ? 'Itinerary' : 'Itineraries'}` : '0 Itineraries'}
-                    </span>
-                  </div>
+                return (
+                  <Link
+                    key={dest.id}
+                    href={`/packages?destination=${dest.slug}`}
+                    className="group block relative h-96 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#E8E3DA]"
+                  >
+                    <img
+                      src={dest.heroImage}
+                      alt={dest.name}
+                      className="w-full h-full object-cover card-zoom-image"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
-                <div className="absolute bottom-5 left-5 right-5 text-white">
-                  <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
-                    {dest.stateOrCountry}
-                  </span>
-                  <h3 className="text-2xl font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
-                    {dest.name}
-                  </h3>
-                  <p className="text-xs text-[#E2E8F0] line-clamp-2 mb-3 font-light">
-                    {dest.shortDescription}
-                  </p>
-                  <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs">
-                    <span className="text-[#CBD5E1]">Starting From</span>
-                    <span className="font-bold text-sm text-white">₹{dest.startingPriceINR.toLocaleString('en-IN')}</span>
-                  </div>
-                </div>
+                    <div className="absolute top-4 left-4">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-white/90 text-[#0F172A] backdrop-blur-sm">
+                        {`${count} ${count === 1 ? 'Itinerary' : 'Itineraries'}`}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-5 left-5 right-5 text-white">
+                      <span className="text-[11px] font-semibold tracking-wider uppercase text-[#C58B3E] block mb-1">
+                        {dest.stateOrCountry}
+                      </span>
+                      <h3 className="text-2xl font-serif-luxury font-bold mb-1 leading-snug group-hover:text-[#C58B3E] transition-colors">
+                        {dest.name}
+                      </h3>
+                      <p className="text-xs text-[#E2E8F0] line-clamp-2 mb-3 font-light">
+                        {dest.shortDescription}
+                      </p>
+                      <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs">
+                        <span className="text-[#CBD5E1]">Starting From</span>
+                        <span className="font-bold text-sm text-white">₹{minPrice.toLocaleString('en-IN')}</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="p-8 text-center bg-white rounded-2xl border border-[#E8E3DA] text-[#64748B]">
+              <p className="text-sm font-medium">New global itineraries are currently being updated.</p>
+              <Link href="/contact" className="mt-2 inline-block text-xs font-bold text-[#154D4F] underline">
+                Contact our concierge for custom international tours
               </Link>
-            );
-          })}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 

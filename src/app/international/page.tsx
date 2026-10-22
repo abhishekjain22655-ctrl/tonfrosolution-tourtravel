@@ -57,22 +57,24 @@ export default function InternationalPage() {
             Popular Global Destinations:
           </span>
           <div className="flex flex-wrap gap-2.5">
-            {internationalDestinations.map((d) => {
-              const tripCount = getDestTripCount(d);
-              return (
-                <Link
-                  key={d.id}
-                  href={`/packages?destination=${d.slug}`}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#154D4F] border border-[#E8E3DA] hover:border-[#C25E34] hover:text-[#C25E34] transition-all shadow-2xs"
-                >
-                  <MapPin className="w-3 h-3 text-[#C25E34]" />
-                  <span>{d.name}</span>
-                  <span className="text-[10px] bg-[#FAF8F5] px-1.5 py-0.2 rounded-full text-[#64748B]">
-                    {tripCount}
-                  </span>
-                </Link>
-              );
-            })}
+            {internationalDestinations
+              .filter((d) => getDestTripCount(d) > 0)
+              .map((d) => {
+                const tripCount = getDestTripCount(d);
+                return (
+                  <Link
+                    key={d.id}
+                    href={`/packages?destination=${d.slug}`}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-[#154D4F] border border-[#E8E3DA] hover:border-[#C25E34] hover:text-[#C25E34] transition-all shadow-2xs"
+                  >
+                    <MapPin className="w-3 h-3 text-[#C25E34]" />
+                    <span>{d.name}</span>
+                    <span className="text-[10px] bg-[#FAF8F5] px-1.5 py-0.2 rounded-full text-[#64748B]">
+                      {tripCount}
+                    </span>
+                  </Link>
+                );
+              })}
           </div>
         </div>
 
