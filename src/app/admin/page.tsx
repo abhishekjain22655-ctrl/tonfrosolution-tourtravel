@@ -1690,16 +1690,53 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="block font-semibold uppercase text-[#475569] mb-1">
-                  Planned Route
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Srinagar (2N) → Gulmarg (1N) → Pahalgam (2N)"
-                  value={packageFormData.route || ''}
-                  onChange={(e) => setPackageFormData({ ...packageFormData, route: e.target.value })}
-                  className="w-full p-2.5 rounded-lg border border-[#E8E3DA] outline-none"
-                />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block font-semibold uppercase text-[#475569]">
+                    Planned Route
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current = packageFormData.route || '';
+                      const needsSpace = current.length > 0 && !current.endsWith(' ');
+                      const next = current + (needsSpace ? ' → ' : '→ ');
+                      setPackageFormData({ ...packageFormData, route: next });
+                    }}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FAF8F5] border border-[#154D4F]/40 hover:bg-[#154D4F] hover:text-white text-[#154D4F] text-[11px] font-bold transition-all shadow-2xs active:scale-95"
+                    title="Click to insert route arrow"
+                  >
+                    <span>+ Insert Arrow</span>
+                    <span className="text-sm font-bold font-mono">→</span>
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="e.g. Srinagar (2N) → Gulmarg (1N) → Pahalgam (2N)"
+                    value={packageFormData.route || ''}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/-->/g, '→').replace(/->/g, '→');
+                      setPackageFormData({ ...packageFormData, route: val });
+                    }}
+                    className="w-full p-2.5 pr-12 rounded-lg border border-[#E8E3DA] focus:ring-1 focus:ring-[#C25E34] outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current = packageFormData.route || '';
+                      const needsSpace = current.length > 0 && !current.endsWith(' ');
+                      const next = current + (needsSpace ? ' → ' : '→ ');
+                      setPackageFormData({ ...packageFormData, route: next });
+                    }}
+                    className="absolute right-1.5 top-1.5 bottom-1.5 px-3 rounded-md bg-[#154D4F]/10 hover:bg-[#154D4F] hover:text-white text-[#154D4F] text-base font-bold flex items-center justify-center transition-colors"
+                    title="Insert arrow →"
+                  >
+                    →
+                  </button>
+                </div>
+                <p className="text-[10px] text-[#64748B] mt-1">
+                  Tip: Click <strong>→</strong> or type <strong>-&gt;</strong> on your keyboard to insert route arrows automatically.
+                </p>
               </div>
 
               <div>
