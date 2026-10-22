@@ -3,6 +3,7 @@ import { connectToDatabase, isMongoConfigured } from '@/lib/mongodb';
 import EnquiryModel from '@/models/Enquiry';
 import { CustomerEnquiry } from '@/types/travel';
 import { sendAdminEnquiryNotification } from '@/lib/email';
+import { enquiryRateLimiter, getClientIp } from '@/lib/rateLimit';
 
 export async function GET(request: NextRequest) {
   try {
@@ -39,11 +40,46 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. IP Rate Limiting (Max 5 submissions per 10 min window)
+    const clientIp = getClientIp(request);
+    const limitCheck = enquiryRateLimiter.check(clientIp);
+    if (!limitCheck.success) {
+      const waitMinutes = Math.ceil(limitCheck.resetInSeconds / 60);
+      return NextResponse.json(
+        {
+          error: `Too many submissions. Please wait ${waitMinutes} minute(s) before submitting another enquiry.`,
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(limitCheck.resetInSeconds),
+          },
+        }
+      );
+    }
+
     const body = await request.json();
+
+    // 2. Honeypot check (hidden field bots auto-fill)
+    if (body._hp_verification || body.faxNumber) {
+      // Silently ignore bot submission
+      return NextResponse.json({
+        saved: true,
+        source: 'honeypot-filtered',
+      });
+    }
 
     if (!body.fullName || !body.phone || !body.destinationPreference) {
       return NextResponse.json(
         { error: 'Missing required enquiry fields: fullName, phone, destinationPreference' },
+        { status: 400 }
+      );
+    }
+
+    // 3. Length guards
+    if (body.fullName.length > 100 || body.phone.length > 30) {
+      return NextResponse.json(
+        { error: 'Input exceeds allowable character limits.' },
         { status: 400 }
       );
     }

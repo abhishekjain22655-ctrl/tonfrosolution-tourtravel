@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase, isMongoConfigured } from '@/lib/mongodb';
 import AdminSettingModel from '@/models/AdminSetting';
-
+import { adminAuthRateLimiter, getClientIp } from '@/lib/rateLimit';
 
 const DEFAULT_PASSCODE = 'admin123';
 
@@ -28,6 +28,24 @@ export async function POST(request: NextRequest) {
     const { action, passcode, newPasscode } = await request.json();
 
     if (action === 'verify') {
+      const clientIp = getClientIp(request);
+      const limitCheck = adminAuthRateLimiter.check(clientIp);
+      if (!limitCheck.success) {
+        const waitMinutes = Math.ceil(limitCheck.resetInSeconds / 60);
+        return NextResponse.json(
+          {
+            valid: false,
+            error: `Too many login attempts. Locked for ${waitMinutes} minute(s).`,
+          },
+          {
+            status: 429,
+            headers: {
+              'Retry-After': String(limitCheck.resetInSeconds),
+            },
+          }
+        );
+      }
+
       let valid = false;
       if (!isMongoConfigured()) {
         valid = passcode === DEFAULT_PASSCODE || passcode === 'travel2026';
@@ -36,6 +54,10 @@ export async function POST(request: NextRequest) {
         const setting = await AdminSettingModel.findOne({ key: 'admin_passcode' });
         const storedKey = setting ? setting.value : DEFAULT_PASSCODE;
         valid = passcode === storedKey || passcode === 'travel2026' || passcode === DEFAULT_PASSCODE;
+      }
+
+      if (valid) {
+        adminAuthRateLimiter.reset(clientIp);
       }
 
       return NextResponse.json({ valid });

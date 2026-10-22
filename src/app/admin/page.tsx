@@ -51,6 +51,22 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [authError, setAuthError] = useState('');
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [lockoutRemaining, setLockoutRemaining] = useState(0);
+
+  useEffect(() => {
+    if (lockoutRemaining <= 0) return;
+    const interval = setInterval(() => {
+      setLockoutRemaining((prev) => {
+        if (prev <= 1) {
+          localStorage.removeItem('vv_admin_lockout_until');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockoutRemaining]);
 
   // MongoDB Status State
   const [dbStatus, setDbStatus] = useState<{
@@ -113,6 +129,17 @@ export default function AdminPage() {
       setIsAuthenticated(true);
       loadAdminData();
     }
+    try {
+      const lockUntil = localStorage.getItem('vv_admin_lockout_until');
+      if (lockUntil) {
+        const remaining = Math.max(0, Math.ceil((parseInt(lockUntil, 10) - Date.now()) / 1000));
+        if (remaining > 0) {
+          setLockoutRemaining(remaining);
+        } else {
+          localStorage.removeItem('vv_admin_lockout_until');
+        }
+      }
+    } catch {}
   }, []);
 
   const loadAdminData = async () => {
@@ -169,15 +196,36 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (lockoutRemaining > 0) {
+      setAuthError(`Console locked. Please wait ${Math.ceil(lockoutRemaining / 60)} minute(s) before trying again.`);
+      return;
+    }
+
     const activeKey = getAdminPasscode();
-    // Allow active passcode or backup keys 'travel2026', 'admin'
+    // Allow active passcode or backup keys 'travel2026', 'admin123'
     if (passcode.trim() === activeKey || passcode === 'travel2026' || passcode === 'admin123') {
       setIsAuthenticated(true);
       sessionStorage.setItem('vv_staff_session', 'active');
       setAuthError('');
+      setFailedAttempts(0);
+      try {
+        localStorage.removeItem('vv_admin_lockout_until');
+      } catch {}
       loadAdminData();
     } else {
-      setAuthError('Invalid staff access passcode. Please check your credentials and try again.');
+      const nextCount = failedAttempts + 1;
+      setFailedAttempts(nextCount);
+      if (nextCount >= 5) {
+        const lockUntil = Date.now() + 15 * 60 * 1000;
+        try {
+          localStorage.setItem('vv_admin_lockout_until', lockUntil.toString());
+        } catch {}
+        setLockoutRemaining(15 * 60);
+        setAuthError('Too many failed attempts. Staff portal locked for 15 minutes.');
+      } else {
+        setAuthError(`Invalid staff access passcode. (${5 - nextCount} attempt(s) remaining)`);
+      }
     }
   };
 
@@ -614,18 +662,22 @@ export default function AdminPage() {
               <input
                 type="password"
                 required
-                placeholder="Enter access passcode"
+                disabled={lockoutRemaining > 0}
+                placeholder={lockoutRemaining > 0 ? "Console temporarily locked" : "Enter access passcode"}
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
-                className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+                className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] focus:outline-none focus:ring-2 focus:ring-[#C25E34] disabled:bg-slate-100 disabled:cursor-not-allowed"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 px-4 rounded-lg bg-[#C25E34] hover:bg-[#A74E28] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm active:scale-95"
+              disabled={lockoutRemaining > 0}
+              className="w-full py-3 px-4 rounded-lg bg-[#C25E34] hover:bg-[#A74E28] disabled:bg-slate-400 disabled:cursor-not-allowed text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm active:scale-95"
             >
-              Sign In to Staff Console
+              {lockoutRemaining > 0
+                ? `Locked (${Math.ceil(lockoutRemaining / 60)} min)`
+                : 'Sign In to Staff Console'}
             </button>
           </form>
 

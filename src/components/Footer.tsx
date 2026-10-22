@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Compass, Phone, Mail, MapPin, MessageCircle, ShieldCheck, Heart } from 'lucide-react';
+import { Compass, Phone, Mail, MapPin, MessageCircle, ShieldCheck, Heart, Lock } from 'lucide-react';
 import { agencyConfig, getWhatsAppLink, getPhoneLink } from '@/config/agency';
 
 export default function Footer() {
@@ -154,9 +154,16 @@ export default function Footer() {
 
         {/* Bottom bar with copyright and sample disclosure */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94A3B8]">
-          <p>
-            © {currentYear} {agencyConfig.legalEntityName}. All rights reserved.
-          </p>
+          <div className="flex items-center gap-2">
+            <span>© {currentYear} {agencyConfig.legalEntityName}. All rights reserved.</span>
+            <Link
+              href="/admin"
+              title="Staff Console"
+              className="opacity-15 hover:opacity-80 transition-opacity text-slate-400 inline-flex items-center"
+            >
+              <Lock className="w-3 h-3" />
+            </Link>
+          </div>
           <div className="flex flex-wrap items-center gap-4">
             <Link href="/about" className="hover:text-white transition-colors">
               About Us
@@ -168,10 +175,6 @@ export default function Footer() {
             <span>•</span>
             <Link href="/contact" className="hover:text-white transition-colors">
               Contact & Support
-            </Link>
-            <span>•</span>
-            <Link href="/admin" className="text-[#C58B3E] hover:underline">
-              Admin Portal
             </Link>
           </div>
         </div>

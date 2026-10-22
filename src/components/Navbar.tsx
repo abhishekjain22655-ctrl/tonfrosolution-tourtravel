@@ -71,15 +71,6 @@ export default function Navbar() {
               <MessageCircle className="w-3 h-3" />
               <span>WhatsApp Us</span>
             </a>
-
-            <span className="text-white/20">|</span>
-
-            <Link
-              href="/admin"
-              className="text-[#FAF8F5]/60 hover:text-white transition-colors text-[11px] font-medium"
-            >
-              Staff Portal
-            </Link>
           </div>
         </div>
       </div>
