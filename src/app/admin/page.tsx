@@ -194,7 +194,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (lockoutRemaining > 0) {
@@ -202,9 +202,30 @@ export default function AdminPage() {
       return;
     }
 
-    const activeKey = getAdminPasscode();
-    // Allow active passcode or backup keys 'travel2026', 'admin123'
-    if (passcode.trim() === activeKey || passcode === 'travel2026' || passcode === 'admin123') {
+    const inputCode = passcode.trim();
+    let isValid = false;
+
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verify', passcode: inputCode }),
+      });
+      if (res.status === 429) {
+        const data = await res.json();
+        setAuthError(data.error || 'Too many attempts. Locked.');
+        return;
+      }
+      if (res.ok) {
+        const data = await res.json();
+        isValid = Boolean(data.valid);
+      }
+    } catch {
+      const activeKey = getAdminPasscode();
+      isValid = inputCode === activeKey.trim();
+    }
+
+    if (isValid) {
       setIsAuthenticated(true);
       sessionStorage.setItem('vv_staff_session', 'active');
       setAuthError('');

@@ -46,14 +46,16 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      const envPasscode = process.env.ADMIN_PASSCODE || process.env.NEXT_PUBLIC_ADMIN_PASSCODE || 'Admin123';
       let valid = false;
+
       if (!isMongoConfigured()) {
-        valid = passcode === DEFAULT_PASSCODE || passcode === 'travel2026';
+        valid = (passcode || '').trim() === envPasscode.trim();
       } else {
         await connectToDatabase();
         const setting = await AdminSettingModel.findOne({ key: 'admin_passcode' });
-        const storedKey = setting ? setting.value : DEFAULT_PASSCODE;
-        valid = passcode === storedKey || passcode === 'travel2026' || passcode === DEFAULT_PASSCODE;
+        const storedKey = (setting && setting.value) ? setting.value : envPasscode;
+        valid = (passcode || '').trim() === storedKey.trim();
       }
 
       if (valid) {

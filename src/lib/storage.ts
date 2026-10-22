@@ -5,7 +5,7 @@ import { destinationsData } from '@/data/destinations';
 const ENQUIRIES_STORAGE_KEY = 'vv_agency_enquiries_v1';
 const PACKAGES_STORAGE_KEY = 'vv_agency_packages_v1';
 const ADMIN_PASSCODE_KEY = 'vv_agency_admin_passcode_v1';
-const DEFAULT_PASSCODE = 'admin123';
+const DEFAULT_PASSCODE = process.env.NEXT_PUBLIC_ADMIN_PASSCODE || process.env.ADMIN_PASSCODE || 'Admin123';
 
 /**
  * Initial sample enquiries for demonstration
