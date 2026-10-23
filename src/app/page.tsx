@@ -14,7 +14,13 @@ import TripSearchHero from '@/components/TripSearchHero';
 import EnquiryForm from '@/components/EnquiryForm';
 
 export default function HomePage() {
-  const [packagesList, setPackagesList] = useState<TravelPackage[]>([]);
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>(() => {
+    if (typeof window !== 'undefined') {
+      const pub = getPublishedPackages();
+      if (pub && pub.length > 0) return pub;
+    }
+    return packagesData.filter((p) => p.status === 'published');
+  });
 
   useEffect(() => {
     setPackagesList(getPublishedPackages());

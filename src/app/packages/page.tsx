@@ -9,13 +9,39 @@ import { TripCategory, TravelPackage } from '@/types/travel';
 import { getPublishedPackages, fetchPackagesFromMongoDB } from '@/lib/storage';
 
 function PackagesFilterContent() {
-  const [packagesList, setPackagesList] = useState<TravelPackage[]>([]);
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>(() => {
+    if (typeof window !== 'undefined') {
+      const pub = getPublishedPackages();
+      if (pub && pub.length > 0) return pub;
+    }
+    return packagesData.filter((p) => p.status === 'published');
+  });
 
+  const searchParams = useSearchParams();
+
+  const [typeFilter, setTypeFilter] = useState<string>(() => searchParams.get('type') || 'all');
+  const [categoryFilter, setCategoryFilter] = useState<string>(() => searchParams.get('category') || 'all');
+  const [maxBudget, setMaxBudget] = useState<number>(250000);
+  const [durationFilter, setDurationFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>(
+    () => searchParams.get('q') || searchParams.get('destination') || ''
+  );
+
+  // 1. Keep state dynamically synchronized with URL query params on client navigation (instant result)
   useEffect(() => {
-    // 1. Immediately populate from local cache
+    const q = searchParams.get('q') || searchParams.get('destination') || '';
+    const type = searchParams.get('type') || 'all';
+    const cat = searchParams.get('category') || 'all';
+
+    setTypeFilter(type);
+    setCategoryFilter(cat);
+    setSearchQuery(q);
+  }, [searchParams]);
+
+  // 2. Fetch live data from MongoDB API & storage event
+  useEffect(() => {
     setPackagesList(getPublishedPackages());
 
-    // 2. Fetch live data from MongoDB API to ensure real-time draft/publish states across devices
     fetchPackagesFromMongoDB().then((allPkgs) => {
       if (Array.isArray(allPkgs) && allPkgs.length > 0) {
         setPackagesList(allPkgs.filter((p) => p.status === 'published'));
@@ -28,18 +54,6 @@ function PackagesFilterContent() {
     window.addEventListener('packages_updated', handleUpdate);
     return () => window.removeEventListener('packages_updated', handleUpdate);
   }, []);
-
-  const searchParams = useSearchParams();
-  const initialType = searchParams.get('type') || 'all';
-  const initialCategory = searchParams.get('category') || 'all';
-  const initialQuery = searchParams.get('q') || '';
-  const initialDest = searchParams.get('destination') || '';
-
-  const [typeFilter, setTypeFilter] = useState<string>(initialType);
-  const [categoryFilter, setCategoryFilter] = useState<string>(initialCategory);
-  const [maxBudget, setMaxBudget] = useState<number>(200000);
-  const [durationFilter, setDurationFilter] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>(initialQuery || initialDest);
 
   const categories: TripCategory[] = [
     'Honeymoon & Romance',
@@ -75,14 +89,15 @@ function PackagesFilterContent() {
       if (durationFilter === 'medium' && (pkg.durationDays <= 5 || pkg.durationDays > 7)) return false;
       if (durationFilter === 'long' && pkg.durationDays <= 7) return false;
 
-      // Text search
+      // Text search (matches title, destination, region, overview, or slug)
       if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
+        const q = searchQuery.toLowerCase().trim();
         const matchesTitle = pkg.title.toLowerCase().includes(q);
         const matchesDest = pkg.destinationName.toLowerCase().includes(q);
         const matchesRegion = pkg.regionOrCountry.toLowerCase().includes(q);
         const matchesOverview = pkg.overview.toLowerCase().includes(q);
-        if (!matchesTitle && !matchesDest && !matchesRegion && !matchesOverview) {
+        const matchesSlug = pkg.slug.toLowerCase().includes(q);
+        if (!matchesTitle && !matchesDest && !matchesRegion && !matchesOverview && !matchesSlug) {
           return false;
         }
       }
@@ -94,9 +109,12 @@ function PackagesFilterContent() {
   const handleReset = () => {
     setTypeFilter('all');
     setCategoryFilter('all');
-    setMaxBudget(200000);
+    setMaxBudget(250000);
     setDurationFilter('all');
     setSearchQuery('');
+    if (typeof window !== 'undefined' && window.location.search) {
+      window.history.replaceState(null, '', '/packages');
+    }
   };
 
   return (
