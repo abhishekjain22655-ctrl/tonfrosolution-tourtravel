@@ -615,7 +615,7 @@ export default function HomePage() {
             </div>
 
             {/* Right Column: Interactive Form */}
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-7 text-[#0F172A]">
               <EnquiryForm />
             </div>
           </div>
