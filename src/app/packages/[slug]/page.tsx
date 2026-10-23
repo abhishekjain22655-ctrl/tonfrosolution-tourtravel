@@ -28,10 +28,21 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `${pkg.title} | ${agencyConfig.companyName}`,
     description: pkg.overview.slice(0, 160),
+    alternates: {
+      canonical: `/packages/${slug}`,
+    },
     openGraph: {
       title: pkg.title,
       description: pkg.overview.slice(0, 160),
       images: [{ url: pkg.heroImage }],
+      url: `/packages/${slug}`,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pkg.title,
+      description: pkg.overview.slice(0, 160),
+      images: [pkg.heroImage],
     },
   };
 }
@@ -42,7 +53,47 @@ async function PackageDetailResolver({ params }: { params: Promise<{ slug: strin
   const { slug } = await params;
   const initialPackage = packagesData.find((p) => p.slug === slug);
 
-  return <PackageDetailClient slug={slug} initialPackage={initialPackage} />;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || agencyConfig.seo.siteUrl || 'https://tonfrosolution-tourtravel.vercel.app';
+
+  const tripJsonLd = initialPackage
+    ? {
+        '@context': 'https://schema.org',
+        '@type': ['TouristTrip', 'Product'],
+        name: initialPackage.title,
+        description: initialPackage.overview,
+        image: initialPackage.heroImage,
+        touristType: initialPackage.categories,
+        itinerary: initialPackage.itinerary?.map((item) => ({
+          '@type': 'TouristAttraction',
+          name: item.title,
+          description: item.description,
+        })),
+        offers: {
+          '@type': 'Offer',
+          price: initialPackage.startingPriceINR,
+          priceCurrency: 'INR',
+          availability: 'https://schema.org/InStock',
+          url: `${siteUrl}/packages/${slug}`,
+          seller: {
+            '@type': 'TravelAgency',
+            name: agencyConfig.companyName,
+            url: siteUrl,
+          },
+        },
+      }
+    : null;
+
+  return (
+    <>
+      {tripJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(tripJsonLd) }}
+        />
+      )}
+      <PackageDetailClient slug={slug} initialPackage={initialPackage} />
+    </>
+  );
 }
 
 export default function PackageDetailPage({ params }: Props) {
