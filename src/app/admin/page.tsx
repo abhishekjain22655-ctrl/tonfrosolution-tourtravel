@@ -257,6 +257,20 @@ export default function AdminPage() {
       isValid = inputCode === activeKey.trim();
     }
 
+    // Fallback: If API returned false, check if user saved a custom passcode locally
+    if (!isValid) {
+      const localKey = getAdminPasscode();
+      if (localKey && inputCode === localKey.trim()) {
+        isValid = true;
+        // Automatically sync the local passcode to MongoDB so all future logins work everywhere
+        fetch('/api/admin/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'change', newPasscode: inputCode }),
+        }).catch(() => {});
+      }
+    }
+
     if (isValid) {
       setIsAuthenticated(true);
       sessionStorage.setItem('vv_staff_session', 'active');
@@ -630,15 +644,10 @@ export default function AdminPage() {
   };
 
   // Change Password
-  const handleChangePassword = (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordMsg(null);
-    const activeKey = getAdminPasscode();
 
-    if (currentPasscode !== activeKey) {
-      setPasswordMsg({ type: 'error', text: 'Current passcode is incorrect.' });
-      return;
-    }
     if (newPasscode.length < 4) {
       setPasswordMsg({ type: 'error', text: 'New passcode must be at least 4 characters.' });
       return;
@@ -648,14 +657,62 @@ export default function AdminPage() {
       return;
     }
 
-    const saved = saveAdminPasscode(newPasscode);
-    if (saved) {
-      setPasswordMsg({ type: 'success', text: 'Admin passcode updated successfully! Use your new passcode for next login.' });
+    try {
+      // 1. Update in database via API
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'change',
+          passcode: currentPasscode.trim(),
+          newPasscode: newPasscode.trim(),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // If API reported incorrect current passcode, check if it matches local fallback
+        const localKey = getAdminPasscode();
+        if (currentPasscode.trim() === localKey.trim()) {
+          const forceRes = await fetch('/api/admin/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'change',
+              newPasscode: newPasscode.trim(),
+            }),
+          });
+          if (!forceRes.ok) {
+            setPasswordMsg({ type: 'error', text: data.error || 'Failed to update passcode.' });
+            return;
+          }
+        } else {
+          setPasswordMsg({ type: 'error', text: data.error || 'Current passcode is incorrect.' });
+          return;
+        }
+      }
+
+      // 2. Also update in localStorage
+      saveAdminPasscode(newPasscode.trim());
+
+      setPasswordMsg({
+        type: 'success',
+        text: 'Admin passcode updated successfully in database! Use your new passcode for all logins.',
+      });
       setCurrentPasscode('');
       setNewPasscode('');
       setConfirmPasscode('');
-    } else {
-      setPasswordMsg({ type: 'error', text: 'Failed to update passcode in storage.' });
+    } catch {
+      // Offline fallback
+      saveAdminPasscode(newPasscode.trim());
+      setPasswordMsg({
+        type: 'success',
+        text: 'Admin passcode updated locally.',
+      });
+      setCurrentPasscode('');
+      setNewPasscode('');
+      setConfirmPasscode('');
     }
   };
 

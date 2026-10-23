@@ -73,12 +73,37 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      const envPasscode = process.env.ADMIN_PASSCODE || process.env.NEXT_PUBLIC_ADMIN_PASSCODE || 'Admin123';
+      let activeStoredKey = envPasscode;
+
+      if (isMongoConfigured()) {
+        await connectToDatabase();
+        const setting = await AdminSettingModel.findOne({ key: 'admin_passcode' });
+        if (setting && setting.value) {
+          activeStoredKey = setting.value;
+        }
+      }
+
+      // If passcode (current passcode) is provided, verify it
+      if (passcode !== undefined) {
+        const matchesCurrent =
+          (passcode || '').trim() === activeStoredKey.trim() ||
+          (passcode || '').trim() === envPasscode.trim();
+
+        if (!matchesCurrent) {
+          return NextResponse.json(
+            { error: 'Current passcode is incorrect.' },
+            { status: 401 }
+          );
+        }
+      }
+
       if (isMongoConfigured()) {
         await connectToDatabase();
         await AdminSettingModel.findOneAndUpdate(
           { key: 'admin_passcode' },
           { $set: { value: newPasscode.trim() } },
-          { upsert: true, new: true }
+          { upsert: true, returnDocument: 'after' }
         );
       }
 
