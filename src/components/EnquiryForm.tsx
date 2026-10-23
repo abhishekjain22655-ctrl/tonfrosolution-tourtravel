@@ -48,7 +48,7 @@ export default function EnquiryForm({
     '₹5,00,000+ (Luxury & Bespoke)',
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -70,8 +70,7 @@ export default function EnquiryForm({
     setIsSubmitting(true);
 
     try {
-      // Genuinely save to persistent storage (and Supabase integration layer)
-      const saved = saveNewEnquiry({
+      const saved = await saveNewEnquiry({
         fullName: formData.fullName.trim(),
         phone: cleanPhone.startsWith('+') ? cleanPhone : `+91 ${cleanPhone}`,
         email: formData.email.trim() || undefined,

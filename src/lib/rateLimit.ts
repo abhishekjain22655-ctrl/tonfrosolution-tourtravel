@@ -21,6 +21,15 @@ export class RateLimiter {
     remaining: number;
     resetInSeconds: number;
   } {
+    if (process.env.NODE_ENV === 'development' || key === '127.0.0.1' || key === '::1') {
+      return {
+        success: true,
+        limit: 1000,
+        remaining: 999,
+        resetInSeconds: 0,
+      };
+    }
+
     const now = Date.now();
     const record = this.cache.get(key);
 

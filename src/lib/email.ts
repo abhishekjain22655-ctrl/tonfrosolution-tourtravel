@@ -169,3 +169,142 @@ export async function sendAdminEnquiryNotification(enquiry: CustomerEnquiry | an
     return { sent: false, message: err?.message || 'Email delivery failed' };
   }
 }
+
+/**
+ * Send an elegant acknowledgement email directly to the Client/Customer who submitted the enquiry
+ */
+export async function sendCustomerEnquiryConfirmation(enquiry: CustomerEnquiry | any): Promise<{ sent: boolean; message: string }> {
+  try {
+    if (!enquiry.email || !enquiry.email.includes('@')) {
+      return { sent: false, message: 'No valid customer email address provided' };
+    }
+
+    const transporter = getEmailTransporter();
+    if (!transporter) {
+      return { sent: false, message: 'SMTP credentials not configured.' };
+    }
+
+    const whatsappLink = `https://wa.me/${agencyConfig.contact.whatsappNumber}`;
+    const phoneCallLink = `tel:${agencyConfig.contact.primaryPhone}`;
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>We Received Your Holiday Enquiry</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #FAF8F5; margin: 0; padding: 24px; color: #1E293B; }
+          .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+          .header { background: linear-gradient(135deg, #0F1E20 0%, #154D4F 100%); color: #ffffff; padding: 36px 28px; text-align: center; }
+          .header h1 { margin: 12px 0 6px 0; font-size: 24px; font-weight: 700; }
+          .badge { display: inline-block; padding: 4px 14px; background: rgba(197, 139, 62, 0.25); border: 1px solid #C58B3E; color: #F8E3C2; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+          .content { padding: 32px 28px; }
+          .greeting { font-size: 16px; color: #0F172A; margin-bottom: 16px; line-height: 1.6; }
+          .summary-card { background: #FAF8F5; border: 1px solid #E8E3DA; border-radius: 12px; padding: 20px; margin: 24px 0; }
+          .summary-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #154D4F; margin-bottom: 12px; letter-spacing: 0.05em; }
+          .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #EFEAE1; font-size: 13px; }
+          .row:last-child { border-bottom: none; }
+          .label { color: #64748B; font-weight: 600; }
+          .value { color: #0F172A; font-weight: 700; text-align: right; }
+          .next-steps { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 12px; padding: 18px 20px; margin: 24px 0; }
+          .next-steps h4 { margin: 0 0 8px 0; font-size: 14px; color: #166534; }
+          .next-steps ol { margin: 0; padding-left: 18px; font-size: 13px; color: #14532D; line-height: 1.6; }
+          .actions { display: flex; gap: 12px; margin-top: 24px; }
+          .btn-wa { display: inline-block; flex: 1; padding: 12px 18px; background-color: #059669; color: #ffffff !important; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 13px; text-align: center; }
+          .btn-call { display: inline-block; flex: 1; padding: 12px 18px; background-color: #154D4F; color: #ffffff !important; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 13px; text-align: center; }
+          .footer { background: #F8FAFC; border-top: 1px solid #E2E8F0; padding: 24px 28px; text-align: center; font-size: 12px; color: #64748B; line-height: 1.6; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <span class="badge">✈️ Holiday Enquiry Received</span>
+            <h1>${agencyConfig.companyName}</h1>
+            <p style="margin: 0; font-size: 13px; color: #CBD5E1;">Your customized travel journey begins here</p>
+          </div>
+
+          <div class="content">
+            <p class="greeting">
+              Dear <strong>${enquiry.fullName}</strong>,<br><br>
+              Thank you for choosing <strong>${agencyConfig.companyName}</strong>! We have successfully received your holiday enquiry for <strong>${enquiry.destinationPreference}</strong>.
+            </p>
+
+            <div class="summary-card">
+              <div class="summary-title">Trip Summary Details</div>
+              <div class="row">
+                <span class="label">Destination</span>
+                <span class="value" style="color: #C25E34;">${enquiry.destinationPreference}</span>
+              </div>
+              ${enquiry.originPackageTitle ? `
+              <div class="row">
+                <span class="label">Package</span>
+                <span class="value">${enquiry.originPackageTitle}</span>
+              </div>` : ''}
+              ${enquiry.travelDateApprox ? `
+              <div class="row">
+                <span class="label">Preferred Travel Dates</span>
+                <span class="value">${enquiry.travelDateApprox}</span>
+              </div>` : ''}
+              ${enquiry.departureCity ? `
+              <div class="row">
+                <span class="label">Departure City</span>
+                <span class="value">${enquiry.departureCity}</span>
+              </div>` : ''}
+              <div class="row">
+                <span class="label">Guests</span>
+                <span class="value">${enquiry.adultsCount || 2} Adults ${enquiry.childrenCount ? `, ${enquiry.childrenCount} Children` : ''}</span>
+              </div>
+              ${enquiry.approxBudgetINR ? `
+              <div class="row">
+                <span class="label">Budget Estimate</span>
+                <span class="value">${enquiry.approxBudgetINR}</span>
+              </div>` : ''}
+            </div>
+
+            <div class="next-steps">
+              <h4>What happens next?</h4>
+              <ol>
+                <li>Our dedicated destination specialist is currently reviewing your preferences.</li>
+                <li>We will craft a personalized itinerary with top hotel and sightseeing options.</li>
+                <li>We will connect with you via phone / WhatsApp shortly to share your customized plan and best quote.</li>
+              </ol>
+            </div>
+
+            <p style="font-size: 13px; color: #475569; margin-bottom: 16px;">
+              Need an immediate answer or want to chat with us right away?
+            </p>
+
+            <div class="actions">
+              <a href="${whatsappLink}" class="btn-wa">Chat on WhatsApp</a>
+              <a href="${phoneCallLink}" class="btn-call">Call Our Office</a>
+            </div>
+          </div>
+
+          <div class="footer">
+            <strong style="color: #0F172A;">${agencyConfig.companyName}</strong><br>
+            ${agencyConfig.contact.officeAddress.street}, ${agencyConfig.contact.officeAddress.locality}<br>
+            ${agencyConfig.contact.officeAddress.city}, ${agencyConfig.contact.officeAddress.state} - ${agencyConfig.contact.officeAddress.pincode}<br>
+            Phone: ${agencyConfig.contact.displayPhone} | Email: ${agencyConfig.contact.email}
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const info = await transporter.sendMail({
+      from: `"${agencyConfig.companyName}" <${process.env.SMTP_USER || agencyConfig.contact.email}>`,
+      to: enquiry.email,
+      subject: `✈️ We've Received Your Enquiry for ${enquiry.destinationPreference} - ${agencyConfig.companyName}`,
+      html: htmlContent,
+      replyTo: agencyConfig.contact.email,
+    });
+
+    console.log('✅ [EMAIL] Customer confirmation sent successfully to:', enquiry.email, info.messageId);
+    return { sent: true, message: `Confirmation sent to ${enquiry.email}` };
+  } catch (err: any) {
+    console.error('❌ [EMAIL] Failed to send customer confirmation email:', err?.message || err);
+    return { sent: false, message: err?.message || 'Customer email delivery failed' };
+  }
+}

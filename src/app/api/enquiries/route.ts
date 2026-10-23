@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase, isMongoConfigured } from '@/lib/mongodb';
 import EnquiryModel from '@/models/Enquiry';
 import { CustomerEnquiry } from '@/types/travel';
-import { sendAdminEnquiryNotification } from '@/lib/email';
+import { sendAdminEnquiryNotification, sendCustomerEnquiryConfirmation } from '@/lib/email';
 import { enquiryRateLimiter, getClientIp } from '@/lib/rateLimit';
 
 export async function GET(request: NextRequest) {
@@ -105,10 +105,11 @@ export async function POST(request: NextRequest) {
         internalNotes: '',
       };
 
-      // Send instant email notification to Admin
-      sendAdminEnquiryNotification(mockEnquiry).catch((err) =>
-        console.warn('Email notify error (local mode):', err)
-      );
+      // Dispatch emails (Admin Alert + Customer Confirmation)
+      await Promise.allSettled([
+        sendAdminEnquiryNotification(mockEnquiry),
+        mockEnquiry.email ? sendCustomerEnquiryConfirmation(mockEnquiry) : Promise.resolve(),
+      ]);
 
       return NextResponse.json({
         saved: true,
@@ -139,10 +140,11 @@ export async function POST(request: NextRequest) {
 
     const savedDoc = newEnquiry.toJSON();
 
-    // Send instant email notification to Admin
-    sendAdminEnquiryNotification(savedDoc).catch((err) =>
-      console.warn('Email notify error (mongodb mode):', err)
-    );
+    // Dispatch emails (Admin Alert + Customer Confirmation)
+    await Promise.allSettled([
+      sendAdminEnquiryNotification(savedDoc),
+      savedDoc.email ? sendCustomerEnquiryConfirmation(savedDoc) : Promise.resolve(),
+    ]);
 
     return NextResponse.json({
       saved: true,

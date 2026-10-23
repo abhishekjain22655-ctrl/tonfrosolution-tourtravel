@@ -251,7 +251,7 @@ export function getStoredEnquiries(): CustomerEnquiry[] {
   }
 }
 
-export function saveNewEnquiry(enquiry: Omit<CustomerEnquiry, 'id' | 'createdAt' | 'status'>): CustomerEnquiry {
+export async function saveNewEnquiry(enquiry: Omit<CustomerEnquiry, 'id' | 'createdAt' | 'status'>): Promise<CustomerEnquiry> {
   const newEntry: CustomerEnquiry = {
     ...enquiry,
     id: `enq-${Date.now()}`,
@@ -269,8 +269,12 @@ export function saveNewEnquiry(enquiry: Omit<CustomerEnquiry, 'id' | 'createdAt'
     }
   }
 
-  // Sync to MongoDB
-  syncEnquiryToMongoDB(newEntry).catch(() => {});
+  // Sync to MongoDB and trigger email alerts
+  try {
+    await syncEnquiryToMongoDB(newEntry);
+  } catch (err) {
+    console.warn('MongoDB enquiry submission error:', err);
+  }
 
   return newEntry;
 }
@@ -373,15 +377,22 @@ export async function fetchEnquiriesFromMongoDB(): Promise<CustomerEnquiry[]> {
   }
 }
 
-export async function syncEnquiryToMongoDB(enquiry: CustomerEnquiry): Promise<void> {
+export async function syncEnquiryToMongoDB(enquiry: CustomerEnquiry): Promise<{ success: boolean; error?: string }> {
   try {
-    await fetch('/api/enquiries', {
+    const res = await fetch('/api/enquiries', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(enquiry),
     });
-  } catch (err) {
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      console.warn('MongoDB enquiry submission error response:', data);
+      return { success: false, error: data?.error || `HTTP ${res.status}` };
+    }
+    return { success: true };
+  } catch (err: any) {
     console.warn('MongoDB enquiry submission queued locally:', err);
+    return { success: false, error: err?.message };
   }
 }
 

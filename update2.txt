@@ -1,0 +1,238 @@
+# IMPLEMENTATION PROMPT — PREMIUM TRAVEL WEBSITE ANIMATION & UI/UX ENHANCEMENT
+
+Act as a senior creative frontend developer, motion designer, and UI/UX specialist.
+
+Implement the animation and visual improvements for our existing Indian travel agency website, which offers domestic and international holiday packages.
+
+The goal is to create a premium, cinematic, immersive travel experience with smooth transitions, elegant spacing, meaningful animations, and excellent performance.
+
+Before starting, review the project files, existing implementation, and previously proposed animation plan. Follow the approved plan and preserve all working functionality.
+
+## 1. CRITICAL: PRESERVE EXISTING BACKGROUND VIDEOS
+
+This is the highest-priority requirement.
+
+- Do not replace existing background videos with images or new videos.
+- Do not change video frames, camera angles, camera composition, aspect ratios, positioning, crop, zoom, playback speed, timing, or transitions.
+- Do not change existing video-generation assets or their intended visual sequence.
+- Do not modify video containers, dimensions, object-fit settings, or frame settings unless explicitly approved.
+- Do not add overlays, filters, gradients, or effects that significantly alter the original video appearance.
+- Keep all existing background video behavior intact.
+
+All new animations must complement the existing video content rather than interfere with it.
+
+If a proposed effect requires changing a protected video or its composition, skip that effect and use an alternative.
+
+## 2. DESIGN DIRECTION
+
+Maintain a sophisticated, premium travel brand aesthetic.
+
+Use:
+- Clean layouts and consistent spacing.
+- Elegant typography and clear visual hierarchy.
+- High-quality destination imagery.
+- Restrained colors and subtle shadows.
+- Smooth, natural motion.
+- Consistent alignment across all sections.
+- Responsive layouts for mobile, tablet, and desktop.
+
+Avoid excessive gradients, unnecessary decorative elements, oversized text, random colors, cluttered layouts, and generic template-like designs.
+
+Do not redesign the entire website unnecessarily. Improve the existing interface while maintaining its identity.
+
+## 3. HERO SECTION ANIMATIONS
+
+Create a polished opening experience using the existing hero background.
+
+Implement:
+- A subtle entrance animation for the main heading.
+- A smooth reveal for supporting text.
+- Staggered entrance for primary and secondary CTA buttons.
+- A refined navigation entrance.
+- Subtle opacity and transform transitions.
+- Optional scroll indicator animation if it fits the existing design.
+
+Keep the existing background video completely unchanged.
+
+Animations should feel cinematic and controlled, not like a presentation slideshow. Visitors must be able to read and interact with the hero immediately.
+
+## 4. SPACING AND GAP REFINEMENT
+
+Improve spacing throughout the entire website.
+
+Review:
+- Header-to-hero spacing.
+- Heading-to-description gaps.
+- Text-to-button gaps.
+- Card internal padding.
+- Grid gaps between destination and package cards.
+- Vertical spacing between sections.
+- Image-to-text spacing.
+- Mobile section padding.
+- Footer column alignment.
+
+Create a consistent spacing system using reusable design tokens.
+
+Use responsive spacing rather than fixed values everywhere. Avoid cramped sections, excessively large empty spaces, inconsistent alignment, and text touching adjacent elements.
+
+Use whitespace intentionally to establish hierarchy and create a premium editorial travel experience.
+
+## 5. SCROLL ANIMATIONS
+
+Use GSAP with ScrollTrigger where it provides genuine visual value.
+
+Implement suitable effects such as:
+- Fade and upward reveal for section headings.
+- Staggered entrance for destination cards.
+- Smooth reveal of holiday package grids.
+- Image-mask reveals for destination photography.
+- Subtle text and image transitions.
+- Gentle parallax on suitable static images.
+- Sequential content reveals for storytelling sections.
+
+Keep effects restrained and consistent.
+
+Do not animate every element independently. Establish a clear motion hierarchy so the website feels cohesive rather than overloaded.
+
+Never apply parallax, clipping, scaling, or transforms to protected background-video containers.
+
+Avoid scroll hijacking, excessive pinning, large blank scroll areas, and animations that make navigation feel slow.
+
+## 6. DOMESTIC AND INTERNATIONAL DESTINATION SECTIONS
+
+Make the destination experience visually engaging.
+
+Implement:
+- Elegant destination-card entrance animations.
+- Subtle image zoom on hover where appropriate.
+- Smooth title and description reveals.
+- Consistent card dimensions and image ratios.
+- Responsive grid transitions.
+- Smooth transitions when switching destination categories, if category switching exists.
+
+Use existing destination assets whenever possible.
+
+Do not invent destinations, package details, ratings, or prices. Maintain the existing data and functionality.
+
+Animations must never prevent users from clicking a destination or opening its package page.
+
+## 7. HOLIDAY PACKAGE CARDS
+
+Enhance package cards with:
+- Smooth hover elevation or border transitions.
+- Subtle image scaling within the image container.
+- Refined CTA hover feedback.
+- Clear visual hierarchy for package name, duration and price.
+- Smooth loading transitions for asynchronously loaded package data.
+- Consistent spacing and alignment across all cards.
+
+Avoid exaggerated rotations, bouncing effects, excessive shadows, or distracting animated price labels.
+
+On touch devices, ensure cards work without hover interactions.
+
+## 8. NAVIGATION AND PAGE TRANSITIONS
+
+Improve navigation without breaking routes or existing behavior.
+
+Implement:
+- Smooth menu open and close transitions.
+- Clear hover and focus states.
+- Animated active navigation indicators.
+- Subtle mobile-menu entrance and exit.
+- Lightweight page transitions where compatible with the existing framework.
+- Appropriate loading feedback during navigation when necessary.
+
+Do not introduce long transition delays. Direct links, browser back/forward navigation, anchors, and mobile navigation must continue to work correctly.
+
+Do not create duplicate headers or menus.
+
+## 9. CUSTOM TRIP FORMS AND BUTTONS
+
+Enhance interactive components with:
+- Subtle button hover and press feedback.
+- Clear input focus transitions.
+- Accessible form validation states.
+- Smooth success and error messages.
+- Lightweight loading indicators during submission.
+- Refined WhatsApp and call CTA interactions.
+
+Do not fake successful submissions, modify the underlying enquiry workflow, or break existing integrations.
+
+Preserve all form values and behavior wherever possible.
+
+## 10. LOADING EXPERIENCE
+
+Improve the perceived loading experience using lightweight techniques.
+
+Use skeletons for genuinely asynchronous content, subtle content reveals, optimized asset loading, and minimal loading indicators when needed.
+
+Avoid unnecessary full-screen loading animations, long branded intro screens, artificial delays, and loading sequences that block users from accessing content.
+
+The website should feel fast even on average mobile internet connections.
+
+## 11. MOBILE AND ACCESSIBILITY
+
+Treat mobile as a first-class experience.
+
+- Reduce or remove expensive parallax on mobile.
+- Avoid layout shifts during animations.
+- Ensure touch targets remain accessible.
+- Prevent horizontal overflow.
+- Preserve readable text and adequate contrast.
+- Respect the prefers-reduced-motion setting.
+- Provide functional content without requiring animations to finish.
+- Ensure keyboard focus and screen-reader accessibility.
+- Disable unnecessary decorative animation on low-capability devices where appropriate.
+
+Do not simply shrink the desktop animations and assume they will work on mobile.
+
+## 12. TECHNICAL IMPLEMENTATION
+
+First inspect the existing stack and installed dependencies.
+
+- Reuse existing libraries where practical.
+- Use CSS transitions for simple interactions.
+- Use GSAP and ScrollTrigger for complex scroll-based effects.
+- Use Framer Motion only where component-level transitions benefit from it and it fits the current architecture.
+- Avoid installing multiple libraries for the same purpose.
+- Register and clean up animation contexts, event listeners, and ScrollTriggers correctly.
+- Prevent duplicate animation initialization during React re-renders.
+- Avoid unnecessary React state updates during scroll.
+- Prevent hydration errors and layout shifts.
+- Avoid animating expensive layout properties when transform and opacity can achieve the same result.
+
+Do not rewrite the application architecture just to add animations.
+
+## 13. FINAL TESTING AND VERIFICATION
+
+After implementation:
+
+1. Run the available lint, type-check, and build commands.
+2. Open the website in the browser and inspect every major section.
+3. Test navigation, package cards, links, forms, and interactive elements.
+4. Test desktop, tablet, and mobile layouts.
+5. Verify that background videos, their frames, crop, position, timing, and composition remain unchanged.
+6. Check for overlapping text, broken spacing, layout shifts, horizontal overflow, and console errors.
+7. Verify reduced-motion behavior.
+8. Check that animations do not delay interactions or harm scrolling performance.
+9. Fix issues introduced by the changes.
+
+## EXECUTION INSTRUCTIONS
+
+Implement the approved improvements throughout the website, not just the homepage.
+
+Work section by section, inspect the browser result, and refine the implementation until the experience is consistent.
+
+Prioritize in this order:
+1. Protect existing videos and functionality.
+2. Fix spacing, layout consistency, and visual hierarchy.
+3. Implement essential entrance and scroll animations.
+4. Refine destination cards, package cards, navigation, and buttons.
+5. Optimize mobile performance and accessibility.
+6. Verify the final result in the browser.
+
+Do not remove working features or replace existing content with placeholders.
+
+At completion, provide a concise report of what was changed, which animations were added, which files were modified, what was tested, and any remaining issues.
+
+The final result should feel like a carefully art-directed premium travel website: cinematic, elegant, smooth, responsive, and fast — never over-animated or visually cluttered.

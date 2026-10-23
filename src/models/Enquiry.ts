@@ -9,7 +9,7 @@ const EnquirySchema = new Schema<IEnquiryDocument>(
   {
     fullName: { type: String, required: true },
     phone: { type: String, required: true, index: true },
-    email: { type: String, required: true },
+    email: { type: String, required: false, default: '' },
     tripType: {
       type: String,
       enum: ['domestic', 'international'],
@@ -45,6 +45,10 @@ const EnquirySchema = new Schema<IEnquiryDocument>(
     },
   }
 );
+
+if (process.env.NODE_ENV !== 'production' && mongoose.models?.Enquiry) {
+  delete (mongoose.models as any).Enquiry;
+}
 
 const EnquiryModel: Model<IEnquiryDocument> =
   mongoose.models.Enquiry || mongoose.model<IEnquiryDocument>('Enquiry', EnquirySchema);
