@@ -146,7 +146,7 @@ export default function EnquiryForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 bg-white p-6 sm:p-8 rounded-xl border border-[#E8E3DA] shadow-sm">
+    <form onSubmit={handleSubmit} className="space-y-5 bg-white text-[#0F172A] p-6 sm:p-8 rounded-xl border border-[#E8E3DA] shadow-sm">
       {originPackageTitle && (
         <div className="p-3.5 rounded-lg bg-[#FAF8F5] border border-[#E8E3DA] flex items-center gap-2.5 text-xs text-[#154D4F]">
           <Sparkles className="w-4 h-4 text-[#C25E34] shrink-0" />
@@ -208,7 +208,7 @@ export default function EnquiryForm({
               placeholder="e.g. Kashmir, Kerala, Bali, Switzerland"
               value={formData.destinationPreference}
               onChange={(e) => setFormData({ ...formData, destinationPreference: e.target.value })}
-              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
             />
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function EnquiryForm({
             placeholder="e.g. Mumbai, Delhi, Bengaluru, Kolkata"
             value={formData.departureCity}
             onChange={(e) => setFormData({ ...formData, departureCity: e.target.value })}
-            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
           />
         </div>
       </div>
@@ -239,7 +239,7 @@ export default function EnquiryForm({
             placeholder="e.g. Priya Sharma"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
           />
         </div>
 
@@ -255,7 +255,7 @@ export default function EnquiryForm({
               placeholder="10-digit number e.g. 9876543210"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
             />
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function EnquiryForm({
             placeholder="name@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
           />
         </div>
 
@@ -287,7 +287,7 @@ export default function EnquiryForm({
               placeholder="e.g. Next month, Diwali, June 2026"
               value={formData.travelDateApprox}
               onChange={(e) => setFormData({ ...formData, travelDateApprox: e.target.value })}
-              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+              className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
             />
           </div>
         </div>
@@ -305,7 +305,7 @@ export default function EnquiryForm({
             max={50}
             value={formData.adultsCount}
             onChange={(e) => setFormData({ ...formData, adultsCount: parseInt(e.target.value) || 1 })}
-            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
           />
         </div>
 
@@ -319,7 +319,7 @@ export default function EnquiryForm({
             max={20}
             value={formData.childrenCount}
             onChange={(e) => setFormData({ ...formData, childrenCount: parseInt(e.target.value) || 0 })}
-            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
           />
         </div>
 
@@ -330,7 +330,7 @@ export default function EnquiryForm({
           <select
             value={formData.approxBudgetINR}
             onChange={(e) => setFormData({ ...formData, approxBudgetINR: e.target.value })}
-            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+            className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
           >
             {budgetOptions.map((opt) => (
               <option key={opt} value={opt}>
@@ -351,7 +351,7 @@ export default function EnquiryForm({
           placeholder="e.g. Looking for a 4-star resort with valley view, Jain meal options, celebrating our 10th anniversary..."
           value={formData.additionalNotes}
           onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
-          className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
+          className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#E8E3DA] bg-white text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#C25E34]"
         />
       </div>
 
