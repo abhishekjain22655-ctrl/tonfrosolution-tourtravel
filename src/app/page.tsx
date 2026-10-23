@@ -8,16 +8,22 @@ import { destinationsData } from '@/data/destinations';
 import { packagesData } from '@/data/packages';
 import { sampleTestimonials } from '@/data/testimonials';
 import { TravelPackage } from '@/types/travel';
-import { getPublishedPackages } from '@/lib/storage';
+import { getPublishedPackages, fetchPackagesFromMongoDB } from '@/lib/storage';
 import PackageCard from '@/components/PackageCard';
 import TripSearchHero from '@/components/TripSearchHero';
 import EnquiryForm from '@/components/EnquiryForm';
 
 export default function HomePage() {
-  const [packagesList, setPackagesList] = useState<TravelPackage[]>(packagesData);
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>([]);
 
   useEffect(() => {
     setPackagesList(getPublishedPackages());
+    fetchPackagesFromMongoDB().then((allPkgs) => {
+      if (Array.isArray(allPkgs) && allPkgs.length > 0) {
+        setPackagesList(allPkgs.filter((p) => p.status === 'published'));
+      }
+    }).catch(() => {});
+
     const handleUpdate = () => {
       setPackagesList(getPublishedPackages());
     };
@@ -25,7 +31,7 @@ export default function HomePage() {
     return () => window.removeEventListener('packages_updated', handleUpdate);
   }, []);
 
-  const publishedPackages = packagesList.filter((p) => p.status === 'published' || !p.status);
+  const publishedPackages = packagesList.filter((p) => p.status === 'published');
   const domesticPackages = publishedPackages.filter((p) => p.destinationType === 'domestic');
   const internationalPackages = publishedPackages.filter((p) => p.destinationType === 'international');
   const domesticDestinations = destinationsData.filter((d) => d.type === 'domestic');

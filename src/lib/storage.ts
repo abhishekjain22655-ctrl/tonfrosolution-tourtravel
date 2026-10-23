@@ -133,22 +133,41 @@ export function getStoredPackages(): TravelPackage[] {
       return initial;
     }
 
-    // Ensure default packages from packagesData are present UNLESS explicitly deleted by user
-    const storedKeys = new Set(parsed.map((p) => p.slug || p.id));
+    // Ensure default packages from packagesData are present UNLESS explicitly deleted or already stored
+    const storedKeys = new Set<string>();
+    parsed.forEach((p) => {
+      if (p.slug) storedKeys.add(p.slug.toLowerCase().trim());
+      if (p.id) storedKeys.add(p.id.toLowerCase().trim());
+      if (p.title) storedKeys.add(p.title.toLowerCase().trim());
+    });
     const merged = [...parsed];
     let needsUpdate = false;
 
     for (const defaultPkg of packagesData) {
-      const key = defaultPkg.slug || defaultPkg.id;
+      const matchSlug = defaultPkg.slug?.toLowerCase().trim();
+      const matchId = defaultPkg.id?.toLowerCase().trim();
+      const matchTitle = defaultPkg.title?.toLowerCase().trim();
+
       // Do not resurrect packages the user has removed/deleted
-      if (deletedSlugs.has(key) || (defaultPkg.slug && deletedSlugs.has(defaultPkg.slug)) || (defaultPkg.id && deletedSlugs.has(defaultPkg.id))) {
+      if (
+        (matchSlug && deletedSlugs.has(matchSlug)) ||
+        (matchId && deletedSlugs.has(matchId))
+      ) {
         continue;
       }
-      if (!storedKeys.has(key)) {
-        merged.push({ ...defaultPkg, status: 'published' });
-        storedKeys.add(key);
-        needsUpdate = true;
+
+      if (
+        (matchSlug && storedKeys.has(matchSlug)) ||
+        (matchId && storedKeys.has(matchId)) ||
+        (matchTitle && storedKeys.has(matchTitle))
+      ) {
+        continue;
       }
+
+      merged.push({ ...defaultPkg, status: 'published' });
+      if (matchSlug) storedKeys.add(matchSlug);
+      if (matchId) storedKeys.add(matchId);
+      needsUpdate = true;
     }
 
     // Ensure every package has a valid status if missing

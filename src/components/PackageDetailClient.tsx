@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { TravelPackage } from '@/types/travel';
 import { agencyConfig, getPhoneLink } from '@/config/agency';
-import { getPackageBySlug, getPublishedPackages } from '@/lib/storage';
+import { getPackageBySlug, getPublishedPackages, fetchPackagesFromMongoDB } from '@/lib/storage';
 import PackageCard from '@/components/PackageCard';
 import EnquiryForm from '@/components/EnquiryForm';
 
@@ -37,24 +37,31 @@ export default function PackageDetailClient({
   const [relatedPackages, setRelatedPackages] = useState<TravelPackage[]>([]);
 
   useEffect(() => {
-    // Check storage for latest data (in case price or details were edited in Admin)
-    const stored = getPackageBySlug(slug);
-    const candidate = stored || initialPackage;
-    if (candidate && candidate.status && candidate.status !== 'published') {
-      // Draft package is hidden from the public website
-      setPkg(undefined);
-    } else if (candidate) {
-      setPkg(candidate);
-      if (!activeImage) setActiveImage(candidate.heroImage);
-    } else {
-      setPkg(undefined);
-    }
+    const evaluate = () => {
+      const stored = getPackageBySlug(slug);
+      const candidate = stored || initialPackage;
+      if (candidate && candidate.status && candidate.status !== 'published') {
+        // Draft package is hidden from the public website
+        setPkg(undefined);
+      } else if (candidate) {
+        setPkg(candidate);
+        if (!activeImage) setActiveImage(candidate.heroImage);
+      } else {
+        setPkg(undefined);
+      }
 
-    const allPub = getPublishedPackages();
-    const related = allPub
-      .filter((p) => p.slug !== slug && (stored ? p.destinationType === stored.destinationType : true))
-      .slice(0, 3);
-    setRelatedPackages(related);
+      const allPub = getPublishedPackages();
+      const related = allPub
+        .filter((p) => p.slug !== slug && (stored ? p.destinationType === stored.destinationType : true))
+        .slice(0, 3);
+      setRelatedPackages(related);
+    };
+
+    evaluate();
+
+    fetchPackagesFromMongoDB().then(() => {
+      evaluate();
+    }).catch(() => {});
   }, [slug, initialPackage]);
 
   if (!pkg) {

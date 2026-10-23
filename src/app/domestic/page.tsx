@@ -5,22 +5,28 @@ import Link from 'next/link';
 import { Sparkles, MapPin } from 'lucide-react';
 import { packagesData } from '@/data/packages';
 import { destinationsData } from '@/data/destinations';
-import { getPublishedPackages } from '@/lib/storage';
+import { getPublishedPackages, fetchPackagesFromMongoDB } from '@/lib/storage';
 import { TravelPackage } from '@/types/travel';
 import PackageCard from '@/components/PackageCard';
 
 export default function DomesticPage() {
-  const [packagesList, setPackagesList] = useState<TravelPackage[]>(packagesData);
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>([]);
 
   useEffect(() => {
     setPackagesList(getPublishedPackages());
+    fetchPackagesFromMongoDB().then((allPkgs) => {
+      if (Array.isArray(allPkgs) && allPkgs.length > 0) {
+        setPackagesList(allPkgs.filter((p) => p.status === 'published'));
+      }
+    }).catch(() => {});
+
     const handleUpdate = () => setPackagesList(getPublishedPackages());
     window.addEventListener('packages_updated', handleUpdate);
     return () => window.removeEventListener('packages_updated', handleUpdate);
   }, []);
 
   const domesticPackages = packagesList.filter(
-    (p) => p.destinationType === 'domestic' && (p.status === 'published' || !p.status)
+    (p) => p.destinationType === 'domestic' && p.status === 'published'
   );
   const domesticDestinations = destinationsData.filter((d) => d.type === 'domestic');
 

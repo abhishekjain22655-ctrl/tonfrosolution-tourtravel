@@ -6,13 +6,22 @@ import { Filter, SlidersHorizontal, MapPin, Tag, RefreshCcw } from 'lucide-react
 import { packagesData } from '@/data/packages';
 import PackageCard from '@/components/PackageCard';
 import { TripCategory, TravelPackage } from '@/types/travel';
-import { getPublishedPackages } from '@/lib/storage';
+import { getPublishedPackages, fetchPackagesFromMongoDB } from '@/lib/storage';
 
 function PackagesFilterContent() {
-  const [packagesList, setPackagesList] = useState<TravelPackage[]>(packagesData);
+  const [packagesList, setPackagesList] = useState<TravelPackage[]>([]);
 
   useEffect(() => {
+    // 1. Immediately populate from local cache
     setPackagesList(getPublishedPackages());
+
+    // 2. Fetch live data from MongoDB API to ensure real-time draft/publish states across devices
+    fetchPackagesFromMongoDB().then((allPkgs) => {
+      if (Array.isArray(allPkgs) && allPkgs.length > 0) {
+        setPackagesList(allPkgs.filter((p) => p.status === 'published'));
+      }
+    }).catch(() => {});
+
     const handleUpdate = () => {
       setPackagesList(getPublishedPackages());
     };
@@ -43,8 +52,8 @@ function PackagesFilterContent() {
 
   const filteredPackages = useMemo(() => {
     return packagesList.filter((pkg) => {
-      // Must be published (or default)
-      if (pkg.status && pkg.status !== 'published') return false;
+      // Strict filter: Never show draft or non-published packages
+      if (pkg.status !== 'published') return false;
 
       // Type filter (domestic vs international)
       if (typeFilter !== 'all' && pkg.destinationType !== typeFilter) {
@@ -80,7 +89,7 @@ function PackagesFilterContent() {
 
       return true;
     });
-  }, [typeFilter, categoryFilter, maxBudget, durationFilter, searchQuery]);
+  }, [packagesList, typeFilter, categoryFilter, maxBudget, durationFilter, searchQuery]);
 
   const handleReset = () => {
     setTypeFilter('all');
