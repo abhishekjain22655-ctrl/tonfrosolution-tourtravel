@@ -5,11 +5,21 @@ import { Send, CheckCircle2, AlertCircle, Phone, MessageCircle, Calendar, Users,
 import { saveNewEnquiry } from '@/lib/storage';
 import { agencyConfig, getWhatsAppLink } from '@/config/agency';
 
+export const budgetOptions = [
+  'Under ₹35,000',
+  '₹35,000 - ₹75,000',
+  '₹75,000 - ₹1,50,000',
+  '₹1,50,000 - ₹3,00,000',
+  '₹3,00,000 - ₹5,00,000',
+  '₹5,00,000+ (Luxury & Bespoke)',
+] as const;
+
 interface EnquiryFormProps {
   originPackageSlug?: string;
   originPackageTitle?: string;
   defaultDestination?: string;
   defaultTripType?: 'domestic' | 'international';
+  defaultBudget?: string;
   onSuccess?: () => void;
 }
 
@@ -18,8 +28,14 @@ export default function EnquiryForm({
   originPackageTitle,
   defaultDestination = '',
   defaultTripType = 'domestic',
+  defaultBudget,
   onSuccess,
 }: EnquiryFormProps) {
+  const initialBudget =
+    defaultBudget && (budgetOptions as readonly string[]).includes(defaultBudget)
+      ? defaultBudget
+      : budgetOptions[0];
+
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -30,7 +46,7 @@ export default function EnquiryForm({
     travelDateApprox: '',
     adultsCount: 2,
     childrenCount: 0,
-    approxBudgetINR: '₹50,000 - ₹1,00,000',
+    approxBudgetINR: initialBudget,
     additionalNotes: '',
   });
 
@@ -38,15 +54,6 @@ export default function EnquiryForm({
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [submittedEnquiryId, setSubmittedEnquiryId] = useState<string | null>(null);
-
-  const budgetOptions = [
-    'Under ₹35,000',
-    '₹35,000 - ₹75,000',
-    '₹75,000 - ₹1,50,000',
-    '₹1,50,000 - ₹3,00,000',
-    '₹3,00,000 - ₹5,00,000',
-    '₹5,00,000+ (Luxury & Bespoke)',
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +107,7 @@ export default function EnquiryForm({
 
   if (status === 'success') {
     const waText = encodeURIComponent(
-      `Hello! I just submitted custom trip enquiry #${submittedEnquiryId} for ${formData.destinationPreference} (${formData.adultsCount} adults). Looking forward to discussing the itinerary.`
+      `Hello! I just submitted custom trip enquiry #${submittedEnquiryId} for ${formData.destinationPreference} (${formData.adultsCount} adults, Budget: ${formData.approxBudgetINR}). Looking forward to discussing the itinerary.`
     );
     const instantWhatsAppUrl = `https://wa.me/${agencyConfig.contact.whatsappNumber}?text=${waText}`;
 
@@ -118,6 +125,25 @@ export default function EnquiryForm({
             {submittedEnquiryId}
           </code>.
         </p>
+
+        {/* Enquiry Details Confirmation Summary */}
+        <div className="my-5 p-3.5 bg-slate-50 border border-slate-200/80 rounded-lg text-xs text-[#475569] max-w-sm mx-auto text-left space-y-2">
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-1.5">
+            <span className="text-[#64748B]">Destination:</span>
+            <strong className="text-[#0F172A]">{formData.destinationPreference}</strong>
+          </div>
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-1.5">
+            <span className="text-[#64748B]">Travellers:</span>
+            <strong className="text-[#0F172A]">
+              {formData.adultsCount} Adults{formData.childrenCount > 0 ? `, ${formData.childrenCount} Children` : ''}
+            </strong>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[#64748B]">Enquiry Budget:</span>
+            <strong className="text-[#154D4F] font-semibold">{formData.approxBudgetINR}</strong>
+          </div>
+        </div>
+
         <p className="text-xs text-[#64748B] max-w-sm mx-auto mb-6">
           Our destination specialist is reviewing your travel preferences for {formData.destinationPreference} and will share a customized day-wise proposal.
         </p>
@@ -134,7 +160,22 @@ export default function EnquiryForm({
           </a>
           <button
             type="button"
-            onClick={() => setStatus('idle')}
+            onClick={() => {
+              setFormData({
+                fullName: '',
+                phone: '',
+                email: '',
+                tripType: defaultTripType,
+                destinationPreference: defaultDestination,
+                departureCity: '',
+                travelDateApprox: '',
+                adultsCount: 2,
+                childrenCount: 0,
+                approxBudgetINR: initialBudget,
+                additionalNotes: '',
+              });
+              setStatus('idle');
+            }}
             className="w-full sm:w-auto px-5 py-3 rounded-lg border border-[#E8E3DA] text-xs font-semibold text-[#0F172A] hover:bg-slate-50 transition-colors"
           >
             Submit Another Request
