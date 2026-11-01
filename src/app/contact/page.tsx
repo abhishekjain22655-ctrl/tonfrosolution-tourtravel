@@ -1,5 +1,4 @@
-import React from 'react';
-import { Phone, Mail, MapPin, MessageCircle, Clock, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Clock, ShieldCheck, HelpCircle, ExternalLink, Navigation } from 'lucide-react';
 import { agencyConfig, getPhoneLink, getWhatsAppLink } from '@/config/agency';
 import { faqData } from '@/data/faq';
 import EnquiryForm from '@/components/EnquiryForm';
@@ -104,23 +103,37 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* Office Location & Hours */}
-        <div className="bg-white p-8 rounded-2xl border border-[#E8E3DA] shadow-sm space-y-8">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-1">
-              Registered Office
-            </span>
-            <h2 className="text-2xl font-serif-luxury font-bold text-[#0F172A]">
-              Office Address & Operating Timings
-            </h2>
+        {/* Office Location, Timings & Interactive Google Map */}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#E8E3DA] shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-[#C25E34] block mb-1">
+                Visit Our Office
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif-luxury font-bold text-[#0F172A]">
+                Head Office Location & Timings
+              </h2>
+            </div>
+            {agencyConfig.contact.officeAddress.mapDirectionUrl && (
+              <a
+                href={agencyConfig.contact.officeAddress.mapDirectionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#154D4F] hover:bg-[#C25E34] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md shrink-0"
+              >
+                <Navigation className="w-4 h-4 text-amber-300" />
+                <span>Get Directions on Google Maps</span>
+                <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+              </a>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Headquarters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Headquarters Card */}
             <div className="space-y-3 p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA]">
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#154D4F]">
                 <MapPin className="w-4 h-4 text-[#C25E34]" />
-                <span>Head Office — New Delhi</span>
+                <span>Registered Office — Pitampura, New Delhi</span>
               </div>
               <p className="text-xs text-[#334155] leading-relaxed">
                 {agencyConfig.contact.officeAddress.street}, {agencyConfig.contact.officeAddress.locality},{' '}
@@ -132,33 +145,121 @@ export default function ContactPage() {
                   Landmark: {agencyConfig.contact.officeAddress.landmark}
                 </p>
               )}
-              <p className="text-xs text-[#64748B] pt-1">
-                Contact: <a href={getPhoneLink()} className="font-semibold text-[#154D4F] hover:underline">{agencyConfig.contact.displayPhone}</a>
-              </p>
+              <div className="pt-2 flex flex-wrap items-center gap-4 text-xs">
+                <a
+                  href={getPhoneLink()}
+                  className="font-semibold text-[#154D4F] hover:text-[#C25E34] inline-flex items-center gap-1"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#C58B3E]" />
+                  <span>{agencyConfig.contact.displayPhone}</span>
+                </a>
+                <span className="text-[#CBD5E1]">|</span>
+                <a
+                  href={getWhatsAppLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>WhatsApp Concierge</span>
+                </a>
+              </div>
             </div>
 
-            {/* Hours & Visiting Info */}
+            {/* Hours & Appointments */}
             <div className="space-y-3 p-5 rounded-xl bg-[#FAF8F5] border border-[#E8E3DA]">
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#154D4F]">
                 <Clock className="w-4 h-4 text-[#C25E34]" />
-                <span>Working Hours & Appointments</span>
+                <span>Working Hours & Consultations</span>
               </div>
               <p className="text-xs text-[#334155] leading-relaxed">
                 <strong>Business Hours:</strong> Monday – Saturday: 9:30 AM to 7:00 PM IST
               </p>
               <p className="text-xs text-[#64748B]">
-                Sunday: Closed for office visits. Dedicated emergency support remains active for on-tour travellers.
+                Sunday: Closed for walk-in office visits. 24/7 dedicated telephone and WhatsApp support remains active for on-tour travellers.
               </p>
-              <p className="text-xs text-[#64748B] pt-1">
-                For in-person trip planning consultations at our Pitampura office, prior scheduling via phone or WhatsApp is recommended.
+              <p className="text-xs text-[#154D4F] font-medium pt-1">
+                For in-person holiday planning sessions at our Pitampura office, prior appointment booking is welcomed.
               </p>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#E8E3DA] flex items-center gap-2 text-xs text-[#64748B]">
-            <Clock className="w-4 h-4 text-[#C25E34]" />
-            <span>Operating Hours: <strong>{agencyConfig.contact.workingHours}</strong></span>
-          </div>
+          {/* Interactive Google Map Embed */}
+          {agencyConfig.contact.officeAddress.mapEmbedUrl && (
+            <div className="space-y-2 pt-2">
+              <div className="relative w-full h-[360px] sm:h-[420px] rounded-2xl overflow-hidden border border-[#E8E3DA] shadow-inner bg-slate-100">
+                <iframe
+                  title="Tonfro Solution Tour and Travel - Head Office Location Map"
+                  src={agencyConfig.contact.officeAddress.mapEmbedUrl}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
+                />
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-3 px-2 text-xs text-[#64748B]">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#C25E34]" />
+                  <span>Vats Market, Pitampura Village, New Delhi – 110034</span>
+                </div>
+                {agencyConfig.contact.officeAddress.mapDirectionUrl && (
+                  <a
+                    href={agencyConfig.contact.officeAddress.mapDirectionUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-[#154D4F] hover:text-[#C25E34] transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>Open full view in Google Maps</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* LocalBusiness Schema for Contact Page */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'ContactPage',
+                name: `Contact & Office Location | ${agencyConfig.companyName}`,
+                description: `Head office address, map location and contact info for ${agencyConfig.companyName} in Pitampura, New Delhi.`,
+                mainEntity: {
+                  '@type': 'TravelAgency',
+                  name: agencyConfig.companyName,
+                  telephone: agencyConfig.contact.primaryPhone,
+                  email: agencyConfig.contact.email,
+                  address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: agencyConfig.contact.officeAddress.street,
+                    addressLocality: agencyConfig.contact.officeAddress.city,
+                    addressRegion: agencyConfig.contact.officeAddress.state,
+                    postalCode: agencyConfig.contact.officeAddress.pincode,
+                    addressCountry: 'IN',
+                  },
+                  geo: {
+                    '@type': 'GeoCoordinates',
+                    latitude: '28.6989',
+                    longitude: '77.1384',
+                  },
+                  hasMap: agencyConfig.contact.officeAddress.mapDirectionUrl,
+                  openingHoursSpecification: [
+                    {
+                      '@type': 'OpeningHoursSpecification',
+                      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                      opens: '09:30',
+                      closes: '19:00',
+                    },
+                  ],
+                },
+              }),
+            }}
+          />
         </div>
 
         {/* Form Section */}

@@ -120,10 +120,18 @@ export default function Footer() {
             <ul className="space-y-3 text-xs text-[#CBD5E1]">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C25E34] shrink-0 mt-0.5" />
-                <span>
-                  {agencyConfig.contact.officeAddress.street}, {agencyConfig.contact.officeAddress.locality},{' '}
-                  {agencyConfig.contact.officeAddress.city}, {agencyConfig.contact.officeAddress.country}
-                </span>
+                <a
+                  href={agencyConfig.contact.officeAddress.mapDirectionUrl || "/contact"}
+                  target={agencyConfig.contact.officeAddress.mapDirectionUrl ? "_blank" : undefined}
+                  rel={agencyConfig.contact.officeAddress.mapDirectionUrl ? "noopener noreferrer" : undefined}
+                  className="hover:text-white transition-colors"
+                  title="View Head Office on Google Maps"
+                >
+                  <span>
+                    {agencyConfig.contact.officeAddress.street}, {agencyConfig.contact.officeAddress.locality},{' '}
+                    {agencyConfig.contact.officeAddress.city}, {agencyConfig.contact.officeAddress.country}
+                  </span>
+                </a>
               </li>
               <li>
                 <a href={getPhoneLink()} className="flex items-center gap-2.5 hover:text-white transition-colors">

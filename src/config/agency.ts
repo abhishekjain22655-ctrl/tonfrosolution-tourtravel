@@ -41,6 +41,7 @@ export interface AgencyConfig {
       country: string;
       landmark?: string;
       mapEmbedUrl?: string;
+      mapDirectionUrl?: string;
     };
     branchOffices?: Array<{
       city: string;
@@ -113,6 +114,8 @@ export const agencyConfig: AgencyConfig = {
       pincode: "110034",
       country: "India",
       landmark: "Vats Market",
+      mapEmbedUrl: "https://maps.google.com/maps?q=Vats+Market,+Pitampura+Village,+New+Delhi,+Delhi+110034&t=&z=16&ie=UTF8&iwloc=&output=embed",
+      mapDirectionUrl: "https://maps.google.com/?q=Office+No.+304,+Third+Floor,+Khasra+No.+502/348,+Vats+Market,+Pitampura+Village,+New+Delhi,+Delhi+110034",
     },
     branchOffices: [
       {
@@ -140,7 +143,7 @@ export const agencyConfig: AgencyConfig = {
   },
 
   seo: {
-    siteUrl: "https://tonfrosolution.com",
+    siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://tonfrosolution-tourtravel.vercel.app",
     defaultTitle: "Tonfro Solution Tour and Travel | Domestic & International Holidays",
     titleTemplate: "%s | Tonfro Solution Tour and Travel",
     defaultDescription:

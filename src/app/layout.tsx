@@ -98,6 +98,7 @@ const jsonLd = {
         latitude: '28.6989',
         longitude: '77.1384',
       },
+      hasMap: agencyConfig.contact.officeAddress.mapDirectionUrl,
       openingHoursSpecification: [
         {
           '@type': 'OpeningHoursSpecification',
