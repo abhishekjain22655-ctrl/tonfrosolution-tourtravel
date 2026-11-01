@@ -114,8 +114,8 @@ export const agencyConfig: AgencyConfig = {
       pincode: "110034",
       country: "India",
       landmark: "Vats Market",
-      mapEmbedUrl: "https://maps.google.com/maps?q=Vats+Market,+Pitampura+Village,+New+Delhi,+Delhi+110034&t=&z=16&ie=UTF8&iwloc=&output=embed",
-      mapDirectionUrl: "https://maps.google.com/?q=Office+No.+304,+Third+Floor,+Khasra+No.+502/348,+Vats+Market,+Pitampura+Village,+New+Delhi,+Delhi+110034",
+      mapEmbedUrl: "https://maps.google.com/maps?q=Office+No.+304,+Third+Floor,+Khasra+No.+502/348,+Vats+Market,+Pitampura+Village,+New+Delhi,+Delhi+110034&t=&z=18&ie=UTF8&iwloc=&output=embed",
+      mapDirectionUrl: "https://www.google.com/maps/search/?api=1&query=Office+No.+304,+Third+Floor,+Khasra+No.+502/348,+Vats+Market,+Pitampura+Village,+New+Delhi,+Delhi+110034",
     },
     branchOffices: [
       {

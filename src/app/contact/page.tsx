@@ -202,8 +202,10 @@ export default function ContactPage() {
               </div>
               <div className="flex flex-wrap items-center justify-between gap-3 px-2 text-xs text-[#64748B]">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#C25E34]" />
-                  <span>Vats Market, Pitampura Village, New Delhi – 110034</span>
+                  <MapPin className="w-3.5 h-3.5 text-[#C25E34] shrink-0" />
+                  <span className="font-medium text-[#1E293B]">
+                    Office No. 304, Third Floor, Khasra No. 502/348, Vats Market, Pitampura Village, New Delhi – 110034
+                  </span>
                 </div>
                 {agencyConfig.contact.officeAddress.mapDirectionUrl && (
                   <a
