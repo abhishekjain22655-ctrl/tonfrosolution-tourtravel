@@ -186,8 +186,8 @@ export default function ContactPage() {
 
           {/* Interactive Google Map Embed */}
           {agencyConfig.contact.officeAddress.mapEmbedUrl && (
-            <div className="space-y-2 pt-2">
-              <div className="relative w-full h-[360px] sm:h-[420px] rounded-2xl overflow-hidden border border-[#E8E3DA] shadow-inner bg-slate-100">
+            <div className="space-y-3 pt-2">
+              <div className="relative w-full h-[380px] sm:h-[440px] rounded-2xl overflow-hidden border border-[#E8E3DA] shadow-inner bg-slate-100">
                 <iframe
                   title="Tonfro Solution Tour and Travel - Head Office Location Map"
                   src={agencyConfig.contact.officeAddress.mapEmbedUrl}
@@ -199,12 +199,44 @@ export default function ContactPage() {
                   referrerPolicy="no-referrer-when-downgrade"
                   className="w-full h-full"
                 />
+
+                {/* Custom Verified Brand Location Card Over the Map */}
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 bg-white/95 backdrop-blur-md p-3.5 sm:p-4 rounded-xl border border-[#E8E3DA] shadow-lg max-w-[280px] sm:max-w-sm pointer-events-auto">
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#154D4F]">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#C25E34] animate-pulse shrink-0" />
+                    <span className="truncate">{agencyConfig.companyName}</span>
+                  </div>
+                  <p className="text-[11px] text-[#475569] leading-snug mt-1.5">
+                    {agencyConfig.contact.officeAddress.street}, {agencyConfig.contact.officeAddress.locality}, {agencyConfig.contact.officeAddress.city} – {agencyConfig.contact.officeAddress.pincode}
+                  </p>
+                  <div className="pt-2.5 flex items-center gap-3 text-[11px]">
+                    {agencyConfig.contact.officeAddress.mapDirectionUrl && (
+                      <a
+                        href={agencyConfig.contact.officeAddress.mapDirectionUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-bold text-[#C25E34] hover:underline inline-flex items-center gap-1"
+                      >
+                        <span>Get Directions</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    <span className="text-[#CBD5E1]">•</span>
+                    <a
+                      href={getPhoneLink()}
+                      className="font-semibold text-[#154D4F] hover:underline"
+                    >
+                      {agencyConfig.contact.displayPhone}
+                    </a>
+                  </div>
+                </div>
               </div>
+
               <div className="flex flex-wrap items-center justify-between gap-3 px-2 text-xs text-[#64748B]">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-[#C25E34] shrink-0" />
                   <span className="font-medium text-[#1E293B]">
-                    Office No. 304, Third Floor, Khasra No. 502/348, Vats Market, Pitampura Village, New Delhi – 110034
+                    {agencyConfig.contact.officeAddress.street}, {agencyConfig.contact.officeAddress.locality}, {agencyConfig.contact.officeAddress.city} – {agencyConfig.contact.officeAddress.pincode}
                   </span>
                 </div>
                 {agencyConfig.contact.officeAddress.mapDirectionUrl && (
@@ -214,7 +246,7 @@ export default function ContactPage() {
                     rel="noopener noreferrer"
                     className="font-bold text-[#154D4F] hover:text-[#C25E34] transition-colors inline-flex items-center gap-1"
                   >
-                    <span>Open full view in Google Maps</span>
+                    <span>Open in Google Maps</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 )}
