@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'aSfEHs-BojEhqk7TlSMoKgG4RdQUiR21238-3oaaBC4',
   },
   openGraph: {
     title: agencyConfig.seo.defaultTitle,
