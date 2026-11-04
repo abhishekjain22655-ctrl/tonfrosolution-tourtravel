@@ -162,12 +162,19 @@ export default function Footer() {
 
         {/* Bottom bar with copyright and sample disclosure */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94A3B8]">
-          <div className="flex items-center gap-2">
-            <span>© {currentYear} {agencyConfig.legalEntityName}. All rights reserved.</span>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-center sm:text-left">
+            <span>
+              © {currentYear} {agencyConfig.companyName}. Operated by{' '}
+              <strong className="font-semibold text-[#CBD5E1]">{agencyConfig.legalEntityName}</strong>
+              {agencyConfig.accreditations.cin && (
+                <span className="text-[11px] text-[#94A3B8]"> (CIN: {agencyConfig.accreditations.cin})</span>
+              )}
+              . All rights reserved.
+            </span>
             <Link
               href="/admin"
               title="Staff Console"
-              className="opacity-15 hover:opacity-80 transition-opacity text-slate-400 inline-flex items-center"
+              className="opacity-15 hover:opacity-80 transition-opacity text-slate-400 inline-flex items-center justify-center"
             >
               <Lock className="w-3 h-3" />
             </Link>

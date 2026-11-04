@@ -266,6 +266,17 @@ export default function ContactPage() {
                 mainEntity: {
                   '@type': 'TravelAgency',
                   name: agencyConfig.companyName,
+                  legalName: agencyConfig.legalEntityName,
+                  alternateName: [
+                    'Tonfro Solutions Private Limited',
+                    'Tonfro Solutions Pvt Ltd',
+                    'Tonfro Solutions',
+                    'Tonfro Solution Tour and Travel',
+                    'Tonfro Travel',
+                    'Tonfro Travels',
+                    'Tonfro Tours',
+                  ],
+                  identifier: agencyConfig.accreditations.cin || 'U79110DL2023PTC412559',
                   telephone: agencyConfig.contact.primaryPhone,
                   email: agencyConfig.contact.email,
                   address: {

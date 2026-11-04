@@ -126,10 +126,7 @@ export default function AboutPage() {
 
           {/* Intro Description */}
           <p className="text-base sm:text-lg text-[#475569] leading-relaxed max-w-4xl mb-10 sm:mb-12">
-            {companyUpper} helps travellers plan memorable journeys across India and
-            international destinations. We aim to make travel planning convenient by helping
-            customers explore destinations, discover holiday options, and organize trips according
-            to their preferences, interests, and budget.
+            <strong>{agencyConfig.companyName}</strong> (popularly known as <strong>{agencyConfig.shortName}</strong>) is the dedicated tour and travel operating division of <strong>{agencyConfig.legalEntityName}</strong>. We help travellers, families, and honeymooners plan memorable journeys across India and top international holiday destinations with transparent pricing, verified hotels, and personalized concierge support.
           </p>
 
           {/* Mission & Vision Cards */}
@@ -272,7 +269,16 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6">
+              <div className="flex items-start gap-3">
+                <ShieldCheck className="w-4 h-4 text-[#0D7C85] shrink-0 mt-0.5" />
+                <div className="text-xs text-[#475569] leading-relaxed">
+                  <p className="font-semibold text-[#0F2942] mb-0.5">Corporate Entity</p>
+                  <p className="font-medium text-[#0F2942]">{agencyConfig.legalEntityName}</p>
+                  <p className="text-[#64748B]">CIN: {agencyConfig.accreditations.cin || 'U79110DL2023PTC412559'}</p>
+                </div>
+              </div>
+
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-[#0D7C85] shrink-0 mt-0.5" />
                 <div className="text-xs text-[#475569] leading-relaxed">

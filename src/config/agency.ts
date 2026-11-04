@@ -53,6 +53,7 @@ export interface AgencyConfig {
   // Legal, Trust & Accreditations
   accreditations: {
     gstNumberPlaceholder: string;
+    cin?: string;
     cinPlaceholder?: string;
     iataMember: boolean;
     ministryOfTourismApproved: boolean;
@@ -89,11 +90,11 @@ export interface AgencyConfig {
 
 export const agencyConfig: AgencyConfig = {
   companyName: "Tonfro Solution Tour and Travel",
-  legalEntityName: "Tonfro Solution Tour and Travel",
+  legalEntityName: "Tonfro Solutions Private Limited",
   shortName: "Tonfro Travel",
   tagline: "Discover the World. Experience More.",
   description:
-    "Tonfro Solution Tour and Travel helps travellers explore domestic and international destinations through thoughtfully presented holiday options and personalized travel enquiries. Discover destinations, explore travel packages, and connect with our team to plan your next journey.",
+    "Tonfro Solution Tour and Travel, a division of Tonfro Solutions Private Limited, helps travellers explore domestic and international destinations through thoughtfully curated holiday packages and personalized travel planning.",
   establishedYear: 2024,
 
   contact: {
@@ -128,11 +129,12 @@ export const agencyConfig: AgencyConfig = {
 
   accreditations: {
     gstNumberPlaceholder: "Registered in New Delhi, India",
-    cinPlaceholder: "Tour and Travel Agency",
+    cin: "U79110DL2023PTC412559",
+    cinPlaceholder: "CIN: U79110DL2023PTC412559",
     iataMember: false,
     ministryOfTourismApproved: false,
-    registeredAgencyBadgeText: "Registered Tour & Travel Operator • New Delhi, India",
-    trustNote: "Official verified details for Tonfro Solution Tour and Travel",
+    registeredAgencyBadgeText: "Registered Corporate Entity: Tonfro Solutions Private Limited (CIN: U79110DL2023PTC412559) • New Delhi, India",
+    trustNote: "Official verified details for Tonfro Solution Tour and Travel (Tonfro Solutions Private Limited)",
   },
 
   socials: {
@@ -144,13 +146,24 @@ export const agencyConfig: AgencyConfig = {
 
   seo: {
     siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://tonfrosolution-tourtravel.vercel.app",
-    defaultTitle: "Tonfro Solution Tour and Travel | Domestic & International Holidays",
+    defaultTitle: "Tonfro Solution Tour and Travel | Tonfro Solutions Private Limited",
     titleTemplate: "%s | Tonfro Solution Tour and Travel",
     defaultDescription:
-      "Explore domestic and international holiday destinations with Tonfro Solution Tour and Travel. Discover travel packages and contact our team to enquire about your next trip.",
+      "Official travel & tour booking platform of Tonfro Solutions Private Limited (Tonfro Solution Tour and Travel). Discover domestic and international holiday packages with seamless planning and verified stays.",
     ogImage: "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?q=80&w=1200&auto=format&fit=crop",
     keywords: [
+      "Tonfro Solutions Private Limited",
+      "Tonfro Solutions Pvt Ltd",
+      "Tonfro Solutions",
+      "Tonfro Solution",
       "Tonfro Solution Tour and Travel",
+      "Tonfro Travel",
+      "Tonfro Travels",
+      "Tonfro Tours",
+      "Tonfro Tour and Travel",
+      "Tonfro Holidays",
+      "Tonfro Pitampura",
+      "Tonfro Delhi",
       "travel agency New Delhi",
       "Pitampura travel agency",
       "domestic holiday packages",
